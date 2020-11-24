@@ -1,0 +1,25 @@
+
+w
+java:S1128#"URemove this unused import 'com.tokbox.android.tutorials.videocall.DeepARRenderer.uv'.(àÈ÷Æøÿÿÿÿ8øóß.
+n	java:S117í"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®ÒĞ8››ÒŸß.
+`
+java:S1124'"EReorder the modifiers to comply with the Java Language Specification.(Í˜ùÉÿÿÿÿÿ
+s	java:S117ì"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(èÂŒŸşÿÿÿÿ8››ÒŸß.
+s	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(›±İÜıÿÿÿÿ8–½ÂŸß.
+N
+java:S1128"1Remove this unused import 'android.opengl.EGL14'.(£ƒÓÂ8ûÒ‹ß.
+h
+java:S1124é"EReorder the modifiers to comply with the Java Language Specification.(µÉ÷ºıÿÿÿÿ8››ÒŸß.
+s	java:S117ê"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Öˆâşÿÿÿÿ8››ÒŸß.
+c
+java:S1128"ARemove this unused import 'javax.microedition.khronos.egl.EGL10'.(ûµÖêşÿÿÿÿ8ûÒ‹ß.
+^	java:S125Â"<This block of commented-out lines of code should be removed.(é÷ÙÍüÿÿÿÿ8â¶¡ ß.
+s	java:S117Ÿ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(èÂŒŸşÿÿÿÿ8–½ÂŸß.
+n	java:S117 "QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(®ÒĞ8–½ÂŸß.
+]	java:S1255"<This block of commented-out lines of code should be removed.(ÚÆÆÊüÿÿÿÿ8æ•ÁŸß.
+c
+java:S1128"FRemove this unused import 'javax.microedition.khronos.egl.EGLContext'.(†ìÑĞ8ûÒ‹ß.
+s	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Öˆâşÿÿÿÿ8–½ÂŸß.
+h
+java:S1128"FRemove this unused import 'javax.microedition.khronos.egl.EGLDisplay'.( ø¿¬úÿÿÿÿ8ûÒ‹ß.
+s	java:S117ë"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(›±İÜıÿÿÿÿ8››ÒŸß.

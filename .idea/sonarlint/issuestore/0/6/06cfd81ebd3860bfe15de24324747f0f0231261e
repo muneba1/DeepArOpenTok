@@ -1,0 +1,27 @@
+
+8
+java:S1116æ"Remove this empty statement.(Åñ­õşÿÿÿÿ
+S
+java:S11971"8Move the array designator from the variable to the type.(ùŸƒÀùÿÿÿÿ
+S
+java:S11977"8Move the array designator from the variable to the type.(”©‚Ìûÿÿÿÿ
+I
+java:S1128
+".Remove this unused import 'android.view.View'.(Ø½­äşÿÿÿÿ
+w
+java:S1450P"\Remove the "textureHeight" field and declare it as a local variable in the relevant methods.(Ğƒ¿øÿÿÿÿ
+N
+java:S1197>"8Move the array designator from the variable to the type.(ÓØÍ•
+W	java:S125Ã"<This block of commented-out lines of code should be removed.(Óª‚şùÿÿÿÿ
+f	java:S117ã"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÂœêK
+D	java:S108ì")Either remove or fill this block of code.(ï¤±¬ıÿÿÿÿ
+q
+java:S1450F"VRemove the "surface" field and declare it as a local variable in the relevant methods.(¸ªÇåıÿÿÿÿ
+v
+java:S1450O"[Remove the "textureWidth" field and declare it as a local variable in the relevant methods.(ëòìäşÿÿÿÿ
+d
+java:S1128"BRemove this unused import 'com.opentok.android.BaseVideoRenderer'.(õŠÖÅÿÿÿÿÿ8ØÜ–ß.
+7
+java:S1170("!Make this final field static too.(©ÔŒÑ
+7
+java:S1170"!Make this final field static too.(¢è¤å

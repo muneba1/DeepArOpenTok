@@ -1,0 +1,83 @@
+
+L
+java:S1874Ë".Remove this use of "Camera"; it is deprecated.(ûÏ¯©8Ô²£ß.
+L
+java:S1874ó".Remove this use of "Camera"; it is deprecated.(Ûßû¬8Ô²£ß.
+Y	java:S125¨"<This block of commented-out lines of code should be removed.(Š…±8Ô²£ß.
+K
+java:S1604Å"(Make this anonymous inner class a lambda(’éúıÿÿÿÿ8Ô²£ß.
+L
+java:S1874ï".Remove this use of "Camera"; it is deprecated.(¯¤³‚8Ô²£ß.
+Q
+java:S1874Ì".Remove this use of "Camera"; it is deprecated.( ï»‹ıÿÿÿÿ8Ô²£ß.
+K
+java:S1604â"(Make this anonymous inner class a lambda(’éúıÿÿÿÿ8Ô²£ß.
+L
+java:S1874“".Remove this use of "Camera"; it is deprecated.(¯±ê8Ô²£ß.
+J
+java:S1874í".Remove this use of "Camera"; it is deprecated.(¦Î‹ûÿÿÿÿ
+P
+java:S1874ó"2Remove this use of "CameraInfo"; it is deprecated.(Ûßû¬8Ô²£ß.
+Q
+java:S1874Ñ".Remove this use of "Camera"; it is deprecated.(Ô´Œÿÿÿÿÿ8Ô²£ß.
+S
+java:S2446©"0"notify" may not wake up the appropriate thread.(óÄ£¶øÿÿÿÿ8Ô²£ß.
+K
+java:S1604°"(Make this anonymous inner class a lambda(’éúıÿÿÿÿ8Ô²£ß.
+u
+java:S1104’"RMake camera a static final constant or non-public and provide accessors if needed.(Û¾ÅÛÿÿÿÿÿ8Ô²£ß.
+v
+java:S1104“"SMake surface a static final constant or non-public and provide accessors if needed.(»ŸÈÓüÿÿÿÿ8Ô²£ß.
+U
+java:S2589Ğ"7Remove this expression which always evaluates to "true"(šîñÎ8Ô²£ß.
+Q
+java:S1874’".Remove this use of "Camera"; it is deprecated.(Û¾ÅÛÿÿÿÿÿ8Ô²£ß.
+J
+java:S1874“",Remove this use of "Size"; it is deprecated.(¯±ê8Ô²£ß.
+d
+java:S2142ë"FEither re-interrupt this method or rethrow the "InterruptedException".(ä ¹€8Ô²£ß.
+?
+java:S1116ñ"Remove this empty statement.(ôŸìúÿÿÿÿ8Ô²£ß.
+E
+java:S1874ë".Remove this use of "Camera"; it is deprecated.(ñÌÈò
+P
+java:S1874ë"2Remove this use of "CameraInfo"; it is deprecated.(ñÌÈò8Ô²£ß.
+O
+java:S1874"2Remove this use of "Parameters"; it is deprecated.(«Ìl8Ô²£ß.
+U
+java:S1874Ñ"2Remove this use of "CameraInfo"; it is deprecated.(Ô´Œÿÿÿÿÿ8Ô²£ß.
+P
+java:S1874ë"2Remove this use of "CameraInfo"; it is deprecated.(ñÌÈò8Ô²£ß.
+L
+java:S1874”".Remove this use of "Camera"; it is deprecated.(á”–Ÿ8Ô²£ß.
+J
+java:S1874”",Remove this use of "Size"; it is deprecated.(á”–Ÿ8Ô²£ß.
+{
+java:S2273ê"^Move this call to "wait()" into a synchronized block to be sure the monitor on "this" is held.(ç£ŠM8Ô²£ß.
+I
+java:S1874!".Remove this use of "Camera"; it is deprecated.(À×ø«şÿÿÿÿ
+S
+java:S2696L"6Make the enclosing method "static" or remove this set.(ÑÏû¤8Ô²£ß.
+L
+java:S1874ë".Remove this use of "Camera"; it is deprecated.(ñÌÈò8Ô²£ß.
+M
+java:S1874!"2Remove this use of "CameraInfo"; it is deprecated.(À×ø«şÿÿÿÿ
+L
+java:S1874‰".Remove this use of "Camera"; it is deprecated.(…÷ˆŒ8Ô²£ß.
+O
+java:S1874£",Remove this use of "JPEG"; it is deprecated.(´€íæùÿÿÿÿ8Ô²£ß.
+Y	java:S125õ"<This block of commented-out lines of code should be removed.(åüÜŸ8Ô²£ß.
+u
+java:S3776Ş"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(şñÊëÿÿÿÿÿ8Ô²£ß.
+K
+java:S1604Ó"(Make this anonymous inner class a lambda(’éúıÿÿÿÿ8Ô²£ß.
+K
+java:S1874".Remove this use of "Camera"; it is deprecated.(«Ìl8Ô²£ß.
+W
+java:S2274ê":Remove this call to "wait" or move it into a "while" loop.(ç£ŠM8Ô²£ß.
+Q
+java:S1874†".Remove this use of "Camera"; it is deprecated.(ß¹ï¯øÿÿÿÿ8Ô²£ß.
+F
+java:S1604Ë"(Make this anonymous inner class a lambda(ûÏ¯©8Ô²£ß.
+
+java:S1186)"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(³…åœ8üµ¸¤ß.

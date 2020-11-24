@@ -1,0 +1,43 @@
+
+^
+java:S1128"<Remove this unused import 'android.content.DialogInterface'.(Š­›¨şÿÿÿÿ8½Ü¤Ÿß.
+V
+java:S10689";Remove this unused "mPublisherViewContainer" private field.(èœä¡üÿÿÿÿ
+¤
+java:S1186”"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(©¬Óãùÿÿÿÿ8ÕÂ«Ÿß.
+Ÿ
+java:S1186®"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Õó™Ô8ÕÂ«Ÿß.
+=
+java:S1068="'Remove this unused "TAG" private field.(Ö—ÈÚ
+¤
+java:S1186€"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(×‚‚Éùÿÿÿÿ8ÕÂ«Ÿß.
+¤
+java:S1186Š"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(’Ìùøÿÿÿÿ8ÕÂ«Ÿß.
+
+java:S14509"fRemove the "mPublisherViewContainer" field and declare it as a local variable in the relevant methods.(èœä¡üÿÿÿÿ
+Ÿ
+java:S1186…"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(óñ±ß8ÕÂ«Ÿß.
+V	java:S110&"<This class has 9 parents which is greater than 5 authorized.(ù ®Íúÿÿÿÿ
+^	java:S125ß"<This block of commented-out lines of code should be removed.(Âöİ“ûÿÿÿÿ8ÕÂ«Ÿß.
+O
+java:S1068B"-Remove this unused "mCapturer" private field.(ÿ‹Í¸øÿÿÿÿ8ß»µ¢ß.
+Ÿ
+java:S1186©"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ëÜ™¾8ÕÂ«Ÿß.
+^	java:S125ì"<This block of commented-out lines of code should be removed.(¶½¨ôùÿÿÿÿ8ÕÂ«Ÿß.
+q
+java:S1192ş"NDefine a constant instead of duplicating this literal " in session: " 3 times.(è¹†¢øÿÿÿÿ8ÕÂ«Ÿß.
+Ÿ
+java:S1186³"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ù¼ùš8ÕÂ«Ÿß.
+t
+java:S14506"YRemove the "mPublisher" field and declare it as a local variable in the relevant methods.(şŞ‘©úÿÿÿÿ
+Ÿ
+java:S1186™"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ï ê8ÕÂ«Ÿß.
+Ÿ
+java:S1186¤"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(®öÉ8ÕÂ«Ÿß.
+¤
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Õ–Ùåÿÿÿÿÿ8ÕÂ«Ÿß.
+¤
+java:S1186¸"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(Ø¨à‰üÿÿÿÿ8ÕÂ«Ÿß.
+m
+java:S1192–"JDefine a constant instead of duplicating this literal "onError: " 3 times.(¦Ş‘êùÿÿÿÿ8ÕÂ«Ÿß.
+^	java:S125Ğ"<This block of commented-out lines of code should be removed.(¦·¦×üÿÿÿÿ8ÕÂ«Ÿß.

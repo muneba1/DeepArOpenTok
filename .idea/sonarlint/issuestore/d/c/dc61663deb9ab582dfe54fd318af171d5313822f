@@ -1,0 +1,84 @@
+
+u
+java:S2737È"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8ˆ”Ì¤ß.
+X
+java:S1141Ö"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8ˆ”Ì¤ß.
+K
+java:S1128"5Remove this unused import 'ai.deepar.ar.ARErrorType'.(ÕµêË
+A
+java:S10686"+Remove this unused "context" private field.(¨îÑÙ
+Y
+java:S1854Ù";Remove this useless assignment to local variable "surface".(êªÖ’8ˆ”Ì¤ß.
+Y
+java:S1068N"7Remove this unused "currentCameraDevice" private field.(§Ãâåúÿÿÿÿ8£øº¤ß.
+K
+java:S1905™"(Remove this unnecessary cast to "int[]".(ÁÛşşÿÿÿÿ8ˆ”Ì¤ß.
+M
+java:S1068L"7Remove this unused "preferredResolution" private field.(ãÅ¸¶
+K
+java:S1068M"6Remove this unused "preferredFramerate" private field.(¼îŞg
+F
+java:S10682"+Remove this unused "LOG_TAG" private field.(ìˆé¦øÿÿÿÿ
+h
+java:S1128("SRemove this unused import 'android.hardware.Camera.Parameters.FOCUS_MODE_INFINITY'.(‡ğéW
+F	java:S108­")Either remove or fill this block of code.(å¥‡8ˆ”Ì¤ß.
+p
+java:S3776°"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(Î”¿§8ˆ”Ì¤ß.
+X
+java:S1141¢"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8ĞÏ¨¤ß.
+E
+java:S10681"*Remove this unused "MEDIUM" private field.(†ÿ†Öûÿÿÿÿ
+u
+java:S2737¬"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8ˆ”Ì¤ß.
+G
+java:S1125½")Remove the literal "false" boolean value.(é´šÀ8ˆ”Ì¤ß.
+\
+java:S1155˜">Use isEmpty() to check whether the collection is empty or not.(ÅË‘Õ8ˆ”Ì¤ß.
+=
+java:S10680"'Remove this unused "LOW" private field.(¹ùÀà
+u
+java:S2737Ş"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8ˆ”Ì¤ß.
+n	java:S117›"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(äÿù¶8ˆ”Ì¤ß.
+K
+java:S1905™"(Remove this unnecessary cast to "int[]".(ÁÛşşÿÿÿÿ8ˆ”Ì¤ß.
+I
+java:S1128"4Remove this unused import 'android.graphics.Bitmap'.(¾ì
+
+java:S4165q"pRemove this useless assignment; "preferredFramerate" already holds the assigned value along all execution paths.(¦šÍ 8»ƒ¡ß.
+M
+java:S3740›"/Provide the parametrized type for this generic.(äÿù¶8ˆ”Ì¤ß.
+F
+java:S1128"0Remove this unused import 'android.media.Image'.(ëïøÂ
+9
+java:S3626¦"Remove this redundant jump.(ûÁİ…8£øº¤ß.
+X
+java:S1141Ç"5Extract this nested try block into a separate method.(¡»¢üùÿÿÿÿ8ˆ”Ì¤ß.
+Y	java:S125‘"<This block of commented-out lines of code should be removed.(î¡üÓ8ûÅİ¤ß.
+M
+java:S3740í"/Provide the parametrized type for this generic.(áçŠÙ8ˆ”Ì¤ß.
+Ÿ
+java:S1186²"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ßû¢½8ˆ”Ì¤ß.
+U
+java:S2589Œ"7Remove this expression which always evaluates to "true"(ÌÁ8ÙÅÕ¤ß.
+T
+java:S1128"9Remove this unused import 'ai.deepar.ar.AREventListener'.(·‚Œ¯ıÿÿÿÿ
+t
+java:S1450K"^Remove the "mSurfaceTexture" field and declare it as a local variable in the relevant methods.(µÏ‚
+E	java:S108ô")Either remove or fill this block of code.(…êğD8ˆ”Ì¤ß.
+i
+java:S1117î"FRename "preferredFramerate" which hides the field declared at line 77.(©ÙÌîıÿÿÿÿ8ˆ”Ì¤ß.
+u
+java:S2737¬"WAdd logic to this catch clause or eliminate it and rethrow the exception automatically.(ö™û8ˆ”Ì¤ß.
+F	java:S108Ÿ")Either remove or fill this block of code.(å¥‡8ˆ”Ì¤ß.
+D	java:S131å""Add a default case to this switch.(á©‚¤şÿÿÿÿ8ˆ”Ì¤ß.
+Ÿ
+java:S1186"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(‚“¶î8ˆ”Ì¤ß.
+Ÿ
+java:S1186µ"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(öÿÕÅ8ˆ”Ì¤ß.
+X	java:S125Û"<This block of commented-out lines of code should be removed.(½Ù›08ˆ”Ì¤ß.
+N
+java:S1481Ï"+Remove this unused "buffer" local variable.(üÁ‹ÿÿÿÿÿ8ˆ”Ì¤ß.
+J
+java:S1481Ù",Remove this unused "surface" local variable.(êªÖ’8ˆ”Ì¤ß.
+‡
+java:S4165r"qRemove this useless assignment; "preferredResolution" already holds the assigned value along all execution paths.(ä±Ëº
