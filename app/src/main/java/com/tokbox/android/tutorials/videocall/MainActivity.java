@@ -1,29 +1,29 @@
 package com.tokbox.android.tutorials.videocall;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.opengl.GLSurfaceView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
-
-import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.widget.Toast;
 
-import com.opentok.android.Session;
-import com.opentok.android.Stream;
-import com.opentok.android.Publisher;
-import com.opentok.android.PublisherKit;
-import com.opentok.android.Subscriber;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.OpentokError;
+import com.opentok.android.Publisher;
+import com.opentok.android.PublisherKit;
+import com.opentok.android.Session;
+import com.opentok.android.Stream;
+import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.tokbox.android.tutorials.basicvideochat.R;
+import com.tokbox.android.tutorials.videocall.renderer.BlackWhiteVideoRender;
+import com.tokbox.android.tutorials.videocall.renderer.DeepARRenderer;
 
 import java.util.List;
 
@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity
     private GLSurfaceView surfaceView;
     private DeepARRenderer renderer;
     private CustomVideoCapturerV2 mCapturer;
+    private BlackWhiteVideoRender videoRenderer1;
+    private CustomVideoCapturer baseVideoCapturer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,9 @@ public class MainActivity extends AppCompatActivity
 
         deepAR = new DeepAR(this);
         deepAR.setLicenseKey("f95428b664031cb8a0b1313aa45665694d052c26a2e7695fbab25543e209fbd11446b44bbcc18a92");
+
         deepAR.initialize(this, this);
+
 
         // initialize view objects from your layout
         mPublisherViewContainer = (FrameLayout) findViewById(R.id.publisher_container);
@@ -196,22 +200,36 @@ public class MainActivity extends AppCompatActivity
     }
 
     /* Session Listener methods */
+    private byte[] metaData = new byte[0];
 
     @Override
     public void onConnected(Session session) {
 
         Log.d(LOG_TAG, "onConnected: Connected to session: " + session.getSessionId());
-        renderer = new DeepARRenderer(deepAR);
+        //renderer = new DeepARRenderer(deepAR);
 
         // initialize Publisher and set this object to listen to Publisher events
 //        mPublisher = new Publisher.Builder(this).build();
+        InvertedColorsVideoRenderer baseVideoRenderer = new InvertedColorsVideoRenderer(this);
+
+        baseVideoCapturer = new CustomVideoCapturer(this, deepAR, Publisher.CameraCaptureResolution.HIGH, Publisher.CameraCaptureFrameRate.FPS_30);
+
+        videoRenderer1 = new BlackWhiteVideoRender(this, deepAR);
         mPublisher = new Publisher.Builder(this)
                 .name("Bob")
                 .audioTrack(true)
                 .videoTrack(true)
-                .capturer(new CameraGrabber(this,deepAR))
-//                .renderer(new BasicCustomVideoRenderer(this,renderer))
+                .capturer(baseVideoCapturer)
+                .renderer(videoRenderer1)
                 .build();
+
+
+      /*  baseVideoRenderer.setInvertedColorsVideoRendererMetadataListener(metadata -> {
+            this.metaData = metadata;
+        });
+
+        baseVideoCapturer.setCustomVideoCapturerDataSource(() -> metaData);*/
+
 
         mPublisher.setPublisherListener(this);
 
@@ -219,23 +237,23 @@ public class MainActivity extends AppCompatActivity
         // set publisher video style to fill view
         mPublisher.getRenderer().setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
-//        mPublisherViewContainer.addView(mPublisher.getView());
+        mPublisherViewContainer.addView(mPublisher.getView());
 
 
         if (mPublisher.getView() instanceof GLSurfaceView) {
-                surfaceView = ((GLSurfaceView) mPublisher.getView());
+            surfaceView = ((GLSurfaceView) mPublisher.getView());
             surfaceView.setZOrderOnTop(true);
-            surfaceView = new GLSurfaceView(this);
+            /*surfaceView = new GLSurfaceView(this);
             surfaceView.setEGLContextClientVersion(2);
             surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-            surfaceView.setEGLContextFactory(new DeepARRenderer.MyContextFactory(renderer));
+            surfaceView.setEGLContextFactory(new DeepARRenderer.MyContextFactory(baseVideoRenderer1));
 
             surfaceView.setRenderer(renderer);
 //            surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
             FrameLayout local = findViewById(R.id.publisher_container);
-            local.addView(surfaceView);
+            local.addView(surfaceView);*/
         }
 
         mSession.publish(mPublisher);
@@ -348,7 +366,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void setup() {
-        cameraGrabber = new CameraGrabber(this,deepAR);
+        cameraGrabber = new CameraGrabber(this, deepAR);
         cameraGrabber.initCamera(new CameraGrabberListener() {
             @Override
             public void onCameraInitialized() {
@@ -386,53 +404,59 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void videoRecordingStarted() {
-
+        Log.d(TAG, "videoRecordingStarted: ");
     }
 
     @Override
     public void videoRecordingFinished() {
+        Log.d(TAG, "videoRecordingFinished: ");
 
     }
 
     @Override
     public void videoRecordingFailed() {
+        Log.d(TAG, "videoRecordingFailed: ");
 
     }
 
     @Override
     public void videoRecordingPrepared() {
-
+        Log.d(TAG, "videoRecordingPrepared: ");
     }
 
     @Override
     public void shutdownFinished() {
-
+        Log.d(TAG, "shutdownFinished: ");
     }
 
     @Override
     public void initialized() {
-            deepAR.switchEffect("mask", "file:///android_asset/blur_high");
+        Log.d(TAG, "initialized: deepAR");
+        deepAR.switchEffect("mask", "file:///android_asset/blur_high");
     }
 
 
     @Override
     public void faceVisibilityChanged(boolean b) {
-
+        Log.d(TAG, "faceVisibilityChanged: ");
     }
 
     @Override
     public void imageVisibilityChanged(String s, boolean b) {
-
+        Log.d(TAG, "imageVisibilityChanged: ");
     }
 
     @Override
     public void frameAvailable(Image image) {
-
+        if (baseVideoCapturer != null) {
+            baseVideoCapturer.lastFrame = image;
+        }
+        Log.d(TAG, "frameAvailable: image");
     }
 
     @Override
     public void error(ARErrorType arErrorType, String s) {
-
+        Log.e(TAG, "error: " + arErrorType + " " + s);
     }
 
     @Override

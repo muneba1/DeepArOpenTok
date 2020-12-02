@@ -13,3 +13,10 @@ app/build
 
 .settings/
 app/jniLibs/
+*.bin
+deepar/build/.transforms/59ecbddd893e9417551319fdc1efe8c2/deepar/jni/arm64-v8a/libnative-lib.so
+deepar/build/.transforms/59ecbddd893e9417551319fdc1efe8c2/deepar/jars/classes.jar
+deepar/build/.transforms/59ecbddd893e9417551319fdc1efe8c2/deepar/jni/armeabi-v7a/libnative-lib.so
+deepar/build/.transforms/59ecbddd893e9417551319fdc1efe8c2/deepar/jni/x86/libnative-lib.so
+deepar/build/.transforms/59ecbddd893e9417551319fdc1efe8c2/deepar/jni/x86_64/libnative-lib.so
+deepar/build/.transforms/e557468c9c9040b12fc270338f1ca9d4/package-aware-r.txt

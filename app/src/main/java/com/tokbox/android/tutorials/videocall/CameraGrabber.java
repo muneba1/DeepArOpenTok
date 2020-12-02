@@ -519,7 +519,7 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
 
         synchronized void setFrameReceiver(DeepAR receiver, final int cameraDevice) {
             frameReceiver = receiver;
-            mHandler.post(new Runnable() {
+           /* mHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     if (camera == null) {
@@ -541,7 +541,7 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
                         }
                     });
                 }
-            });
+            });*/
         }
 
         private void init() {
