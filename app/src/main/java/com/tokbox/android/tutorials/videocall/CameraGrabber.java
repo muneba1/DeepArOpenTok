@@ -48,13 +48,10 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
     private int width = 640;
     private int height = 480;
     private CameraResolutionPreset resolutionPreset = CameraResolutionPreset.P640x480;
-    Publisher.CameraListener cameraListener;
     private int screenOrientation = 0;
     private Display mCurrentDisplay;
     Context context;
 
-    private int mCaptureWidth = -1;
-    private int mCaptureHeight = -1;
     DeepAR deepAR;
 
     public CameraGrabber(Context context, DeepAR deepAR) {
@@ -90,7 +87,7 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
                     VideoUtils.Size resolution = this.getPreferredResolution();
                     this.configureCaptureSize(resolution.width, resolution.height);
                     Camera.Parameters parameters = mThread.camera.getParameters();
-                    parameters.setPreviewSize(this.mCaptureWidth, this.mCaptureHeight);
+                    parameters.setPreviewSize(this.width, this.height);
                     final int PIXEL_FORMAT = 17;
                     parameters.setPreviewFormat(PIXEL_FORMAT);
                     parameters.setPreviewFpsRange(this.mCaptureFPSRange[0], this.mCaptureFPSRange[1]);
@@ -110,14 +107,7 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
                         return -1;
                     }
 
-               /*     PixelFormat.getPixelFormatInfo(PIXEL_FORMAT, this.mPixelFormat);
-                    int bufSize = this.mCaptureWidth * this.mCaptureHeight * this.mPixelFormat.bitsPerPixel / 8;
-                    Object buffer = null;
 
-                    for (int e = 0; e < 3; ++e) {
-                        byte[] var8 = new byte[bufSize];
-                        mThread.camera.addCallbackBuffer(var8);
-                    }*/
 
                     try {
                         mThread.surface = new SurfaceTexture(42);
@@ -159,7 +149,7 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
         this.mPreviewBufferLock.lock();
         if (this.isCaptureRunning && data != null && data.length == this.mExpectedFrameSize) {
             int currentRotation = this.compensateCameraRotation(this.mCurrentDisplay.getRotation());
-            this.provideByteArrayFrame(data, 1, mCaptureWidth, mCaptureHeight, currentRotation, true);
+            this.provideByteArrayFrame(data, 1, width, height, currentRotation, true);
         }
         this.mPreviewBufferLock.unlock();
 
@@ -250,8 +240,8 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
                 settings = new CaptureSettings();
                 this.configureCaptureSize(resolution.width, resolution.height);
                 settings.fps = framerate;
-                settings.width = this.mCaptureWidth;
-                settings.height = this.mCaptureHeight;
+                settings.width = this.width;
+                settings.height = this.height;
                 settings.format = 1;
                 settings.expectedDelay = 0;
             } else {
@@ -332,8 +322,8 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
             maxh = minh;
         }
 
-        this.mCaptureWidth = var13;
-        this.mCaptureHeight = maxh;
+        this.width = var13;
+        this.height = maxh;
     }
 
 
@@ -536,7 +526,11 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
                                 currentBuffer = (currentBuffer + 1) % NUMBER_OF_BUFFERS;
                             }
                             if (camera != null) {
-                                camera.addCallbackBuffer(data);
+                                try {
+                                    camera.addCallbackBuffer(data);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "onPreviewFrame: " + e);
+                                }
                             }
                         }
                     });
@@ -638,8 +632,12 @@ public class CameraGrabber extends BaseVideoCapturer implements Camera.PreviewCa
                 buffers[i] = ByteBuffer.allocateDirect(width * height * 3 / 2);
                 buffers[i].order(ByteOrder.nativeOrder());
                 buffers[i].position(0);
-                byte[] buffer = new byte[1382400];
-                camera.addCallbackBuffer(buffer);
+                byte[] buffer = new byte[width * height * 3 / 2];
+                try {
+                    camera.addCallbackBuffer(buffer);
+                } catch (Exception e) {
+                    Log.e(TAG, "init: " + e);
+                }
             }
 
 
