@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.media.Image;
-import android.media.ImageReader;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,10 +22,11 @@ import com.opentok.android.Stream;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.tokbox.android.tutorials.basicvideochat.R;
-import com.tokbox.android.tutorials.videocall.renderer.BlackWhiteVideoRender;
+import com.tokbox.android.tutorials.videocall.capturer.CustomVideoCapturer;
+import com.tokbox.android.tutorials.videocall.renderer.DeepArOpenTokRenderer;
 import com.tokbox.android.tutorials.videocall.renderer.DeepARRenderer;
+import com.tokbox.android.tutorials.videocall.utils.Helper;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.List;
 
@@ -62,12 +62,12 @@ public class MainActivity extends AppCompatActivity
 
 
     private static final String TAG = "MainActivity";
-    private CameraGrabber cameraGrabber;
+   // private CameraGrabber cameraGrabber;
     private DeepAR deepAR;
     private GLSurfaceView surfaceView;
     private DeepARRenderer renderer;
-    private CustomVideoCapturerV2 mCapturer;
-    private BlackWhiteVideoRender videoRenderer1;
+   // private CustomVideoCapturerV2 mCapturer;
+    private DeepArOpenTokRenderer videoRenderer1;
     private CustomVideoCapturer baseVideoCapturer;
 
     @Override
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity
 
         deepAR = new DeepAR(this);
         deepAR.setLicenseKey("f95428b664031cb8a0b1313aa45665694d052c26a2e7695fbab25543e209fbd11446b44bbcc18a92");
-
         deepAR.initialize(this, this);
 
 
@@ -213,11 +212,11 @@ public class MainActivity extends AppCompatActivity
 
         // initialize Publisher and set this object to listen to Publisher events
 //        mPublisher = new Publisher.Builder(this).build();
-        InvertedColorsVideoRenderer baseVideoRenderer = new InvertedColorsVideoRenderer(this);
+       // InvertedColorsVideoRenderer baseVideoRenderer = new InvertedColorsVideoRenderer(this);
 
         baseVideoCapturer = new CustomVideoCapturer(this, deepAR, Publisher.CameraCaptureResolution.HIGH, Publisher.CameraCaptureFrameRate.FPS_30);
 
-        videoRenderer1 = new BlackWhiteVideoRender(this, deepAR);
+        videoRenderer1 = new DeepArOpenTokRenderer(this, deepAR);
         mPublisher = new Publisher.Builder(this)
                 .name("Bob")
                 .audioTrack(true)
@@ -369,35 +368,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     void setup() {
-        cameraGrabber = new CameraGrabber(this, deepAR);
-        cameraGrabber.initCamera(new CameraGrabberListener() {
-            @Override
-            public void onCameraInitialized() {
-                cameraGrabber.setFrameReceiver(deepAR);
-                cameraGrabber.startPreview();
-            }
-
-            @Override
-            public void onCameraError(String errorMsg) {
-                Log.e("Error", errorMsg);
-            }
-        });
-
         renderer = new DeepARRenderer(deepAR);
-
         surfaceView = new GLSurfaceView(this);
         surfaceView.setEGLContextClientVersion(2);
         surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-
         surfaceView.setEGLContextFactory(new DeepARRenderer.MyContextFactory(renderer));
-
         surfaceView.setRenderer(renderer);
         surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
         FrameLayout local = findViewById(R.id.publisher_container);
         local.addView(surfaceView);
-
-
     }
 
     @Override
@@ -451,75 +431,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void frameAvailable(Image image) {
-       /* ByteBuffer buffer = image.getPlanes()[0].getBuffer();
-        byte[] bytes = new byte[buffer.remaining()];
-        buffer.get(bytes);
-        baseVideoCapturer.lastFrame = buffer;
-*/
         if(image!=null){
             final Image.Plane[] planes = image.getPlanes();
-            int width_ = image.getWidth();
-            int height_ = image.getHeight();
-            int row_stride_ = planes[0].getRowStride();
-            ByteBuffer buf = deepCopy(planes[0].getBuffer());
-            baseVideoCapturer.lastFrame = buf;
+            baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
         }
-       /* int[] frame;
-        Bitmap bitmapFromImageReader = getBitmapFromImageReader(image);
-        if (bitmapFromImageReader != null) {
-            baseVideoCapturer.setFrame(bitmapFromImageReader);
-            *//*if (baseVideoCapturer.lastFrame == null) {
-                baseVideoCapturer.lastFrame = ByteBuffer.allocate(1000000);
-            }
-            baseVideoCapturer.lastFrame.clear();
-            bitmapFromImageReader.copyPixelsToBuffer(baseVideoCapturer.lastFrame);*//*
-        }*/
-
-       /* if (baseVideoCapturer != null && image != null) {
-            if (baseVideoCapturer.lastFrame == null)
-                deep
-                baseVideoCapturer.lastFrame = ByteBuffer.allocate(1000000);
-            baseVideoCapturer.lastFrame.clear();
-            for (int i = 0; i < image.getPlanes().length; i++) {
-                baseVideoCapturer.lastFrame.put(image.getPlanes()[i].getBuffer());
-            }
-        }*/
         Log.d(TAG, "frameAvailable: image");
-    }
-
-
-    public static Bitmap getBitmapFromImageReader(Image image) {
-        if (image == null)
-            return null;
-        Bitmap bitmap;
-
-        //get image buffer
-        final Image.Plane[] planes = image.getPlanes();
-        final ByteBuffer buffer = planes[0].getBuffer();
-
-        int pixelStride = planes[0].getPixelStride();
-        int rowStride = planes[0].getRowStride();
-        int rowPadding = rowStride - pixelStride * image.getWidth();
-        // create bitmap
-        bitmap = Bitmap.createBitmap(image.getWidth() + rowPadding / pixelStride, image.getHeight(), Bitmap.Config.ARGB_8888);
-        bitmap.copyPixelsFromBuffer(buffer);
-        image.close();
-        return bitmap;
-    }
-
-    private ByteBuffer deepCopy(ByteBuffer source) {
-
-        int sourceP = source.position();
-        int sourceL = source.limit();
-
-        ByteBuffer target = ByteBuffer.allocateDirect(source.remaining());
-
-        target.put(source);
-        target.flip();
-
-        source.position(sourceP);
-        source.limit(sourceL);
-        return target;
     }
 
     @Override

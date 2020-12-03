@@ -1,4 +1,4 @@
-package com.tokbox.android.tutorials.videocall;
+package com.tokbox.android.tutorials.videocall.capturer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
-import android.media.Image;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -22,7 +21,6 @@ import com.opentok.android.Publisher;
 import com.opentok.android.VideoUtils;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -407,12 +405,12 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                     provideByteArrayFrame(data, NV21, captureWidth,
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
-                    if (lastFrame != null ) {
-                       /* provideBufferFrame(frameDeepAr, ARGB, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());*/
+                   /* if (lastFrame != null ) {
+                       *//* provideBufferFrame(frameDeepAr, ARGB, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());*//*
                         provideBufferFrame(lastFrame, 11, captureWidth,
                                 captureHeight, currentRotation, isFrontCamera());
-                    } else
+                    } else*/
                         provideByteArrayFrame(data, NV21, captureWidth,
                                 captureHeight, currentRotation, isFrontCamera());
                 }

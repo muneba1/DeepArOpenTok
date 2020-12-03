@@ -27,7 +27,6 @@ public class WebServiceCoordinator {
     }
 
     public void fetchSessionConnectionData(String sessionInfoUrlEndpoint) {
-
         RequestQueue reqQueue = Volley.newRequestQueue(context);
         reqQueue.add(new JsonObjectRequest(Request.Method.GET, sessionInfoUrlEndpoint,
                                             null, new Response.Listener<JSONObject>() {

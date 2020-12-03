@@ -220,8 +220,7 @@ public class DeepARRenderer implements GLSurfaceView.Renderer {
         this.callInProgress = callInProgress;
     }
 
-    public void displayFrame(BaseVideoRenderer.Frame frame) {
-    }
+
 
     public static class MyContextFactory implements GLSurfaceView.EGLContextFactory {
 
