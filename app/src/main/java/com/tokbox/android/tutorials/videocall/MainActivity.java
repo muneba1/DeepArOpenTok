@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int RC_SETTINGS_SCREEN_PERM = 123;
     private static final int RC_VIDEO_APP_PERM = 124;
+    private static final String TAG = "MainActivity";
 
     // Suppressing this warning. mWebServiceCoordinator will get GarbageCollected if it is local.
     @SuppressWarnings("FieldCanBeLocal")
@@ -61,13 +62,8 @@ public class MainActivity extends AppCompatActivity
     private FrameLayout mSubscriberViewContainer;
 
 
-    private static final String TAG = "MainActivity";
-   // private CameraGrabber cameraGrabber;
     private DeepAR deepAR;
     private GLSurfaceView surfaceView;
-    private DeepARRenderer renderer;
-   // private CustomVideoCapturerV2 mCapturer;
-    private DeepArOpenTokRenderer videoRenderer1;
     private CustomVideoCapturer baseVideoCapturer;
 
     @Override
@@ -79,63 +75,46 @@ public class MainActivity extends AppCompatActivity
         deepAR.setLicenseKey("f95428b664031cb8a0b1313aa45665694d052c26a2e7695fbab25543e209fbd11446b44bbcc18a92");
         deepAR.initialize(this, this);
 
-
-        // initialize view objects from your layout
         mPublisherViewContainer = (FrameLayout) findViewById(R.id.publisher_container);
         mSubscriberViewContainer = (FrameLayout) findViewById(R.id.subscriber_container);
         requestPermissions();
-
     }
-
-    /* Activity lifecycle methods */
 
     @Override
     protected void onPause() {
-
         Log.d(LOG_TAG, "onPause");
-
         super.onPause();
-
         if (mSession != null) {
             mSession.onPause();
         }
-
     }
 
     @Override
     protected void onResume() {
-
         Log.d(LOG_TAG, "onResume");
-
         super.onResume();
-
         if (mSession != null) {
             mSession.onResume();
         }
         if (surfaceView != null) {
             surfaceView.onResume();
         }
-
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-
         Log.d(LOG_TAG, "onPermissionsGranted:" + requestCode + ":" + perms.size());
     }
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-
         Log.d(LOG_TAG, "onPermissionsDenied:" + requestCode + ":" + perms.size());
-
         if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
             new AppSettingsDialog.Builder(this)
                     .setTitle(getString(R.string.title_settings_dialog))
@@ -150,7 +129,6 @@ public class MainActivity extends AppCompatActivity
 
     @AfterPermissionGranted(RC_VIDEO_APP_PERM)
     private void requestPermissions() {
-
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // if there is no server URL set
@@ -177,46 +155,32 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initializeSession(String apiKey, String sessionId, String token) {
-
         mSession = new Session.Builder(this, apiKey, sessionId).build();
         mSession.setSessionListener(this);
         mSession.connect(token);
     }
 
-    /* Web Service Coordinator delegate methods */
-
+    //region Web Service Coordinator delegate methods
     @Override
     public void onSessionConnectionDataReady(String apiKey, String sessionId, String token) {
-
         Log.d(LOG_TAG, "ApiKey: " + apiKey + " SessionId: " + sessionId + " Token: " + token);
         initializeSession(apiKey, sessionId, token);
     }
 
     @Override
     public void onWebServiceCoordinatorError(Exception error) {
-
         Log.e(LOG_TAG, "Web Service error: " + error.getMessage());
         Toast.makeText(this, "Web Service error: " + error.getMessage(), Toast.LENGTH_LONG).show();
         finish();
-
     }
+    //endregion
 
-    /* Session Listener methods */
-    private byte[] metaData = new byte[0];
-
+    //region Session Listener methods
     @Override
     public void onConnected(Session session) {
-
         Log.d(LOG_TAG, "onConnected: Connected to session: " + session.getSessionId());
-        //renderer = new DeepARRenderer(deepAR);
-
-        // initialize Publisher and set this object to listen to Publisher events
-//        mPublisher = new Publisher.Builder(this).build();
-       // InvertedColorsVideoRenderer baseVideoRenderer = new InvertedColorsVideoRenderer(this);
-
         baseVideoCapturer = new CustomVideoCapturer(this, deepAR, Publisher.CameraCaptureResolution.HIGH, Publisher.CameraCaptureFrameRate.FPS_30);
-
-        videoRenderer1 = new DeepArOpenTokRenderer(this, deepAR);
+        DeepArOpenTokRenderer videoRenderer1 = new DeepArOpenTokRenderer(this, deepAR);
         mPublisher = new Publisher.Builder(this)
                 .name("Bob")
                 .audioTrack(true)
@@ -224,54 +188,27 @@ public class MainActivity extends AppCompatActivity
                 .capturer(baseVideoCapturer)
                 .renderer(videoRenderer1)
                 .build();
-
-
-      /*  baseVideoRenderer.setInvertedColorsVideoRendererMetadataListener(metadata -> {
-            this.metaData = metadata;
-        });
-
-        baseVideoCapturer.setCustomVideoCapturerDataSource(() -> metaData);*/
-
-
         mPublisher.setPublisherListener(this);
-
-
         // set publisher video style to fill view
         mPublisher.getRenderer().setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
                 BaseVideoRenderer.STYLE_VIDEO_FILL);
         mPublisherViewContainer.addView(mPublisher.getView());
 
-
         if (mPublisher.getView() instanceof GLSurfaceView) {
             surfaceView = ((GLSurfaceView) mPublisher.getView());
             surfaceView.setZOrderOnTop(true);
-            /*surfaceView = new GLSurfaceView(this);
-            surfaceView.setEGLContextClientVersion(2);
-            surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-
-            surfaceView.setEGLContextFactory(new DeepARRenderer.MyContextFactory(baseVideoRenderer1));
-
-            surfaceView.setRenderer(renderer);
-//            surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-
-            FrameLayout local = findViewById(R.id.publisher_container);
-            local.addView(surfaceView);*/
         }
-
         mSession.publish(mPublisher);
     }
 
     @Override
     public void onDisconnected(Session session) {
-
         Log.d(LOG_TAG, "onDisconnected: Disconnected from session: " + session.getSessionId());
     }
 
     @Override
     public void onStreamReceived(Session session, Stream stream) {
-
         Log.d(LOG_TAG, "onStreamReceived: New Stream Received " + stream.getStreamId() + " in session: " + session.getSessionId());
-
         if (mSubscriber == null) {
             mSubscriber = new Subscriber.Builder(this, stream).build();
             mSubscriber.getRenderer().setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE, BaseVideoRenderer.STYLE_VIDEO_FILL);
@@ -283,9 +220,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onStreamDropped(Session session, Stream stream) {
-
         Log.d(LOG_TAG, "onStreamDropped: Stream Dropped: " + stream.getStreamId() + " in session: " + session.getSessionId());
-
         if (mSubscriber != null) {
             mSubscriber = null;
             mSubscriberViewContainer.removeAllViews();
@@ -296,15 +231,13 @@ public class MainActivity extends AppCompatActivity
     public void onError(Session session, OpentokError opentokError) {
         Log.e(LOG_TAG, "onError: " + opentokError.getErrorDomain() + " : " +
                 opentokError.getErrorCode() + " - " + opentokError.getMessage() + " in session: " + session.getSessionId());
-
         showOpenTokError(opentokError);
     }
+    //endregion
 
-    /* Publisher Listener methods */
-
+    //region Publisher Listener methods
     @Override
     public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
-
         Log.d(LOG_TAG, "onStreamCreated: Publisher Stream Created. Own stream " + stream.getStreamId());
 
     }
@@ -360,29 +293,11 @@ public class MainActivity extends AppCompatActivity
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+    //endregion
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        setup();
-    }
-
-    void setup() {
-        renderer = new DeepARRenderer(deepAR);
-        surfaceView = new GLSurfaceView(this);
-        surfaceView.setEGLContextClientVersion(2);
-        surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        surfaceView.setEGLContextFactory(new DeepARRenderer.MyContextFactory(renderer));
-        surfaceView.setRenderer(renderer);
-        surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-
-        FrameLayout local = findViewById(R.id.publisher_container);
-        local.addView(surfaceView);
-    }
-
+    //region deepAr Listener methods
     @Override
     public void screenshotTaken(Bitmap bitmap) {
-
     }
 
     @Override
@@ -431,7 +346,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void frameAvailable(Image image) {
-        if(image!=null){
+        if (image != null) {
             final Image.Plane[] planes = image.getPlanes();
             baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
         }
@@ -447,4 +362,5 @@ public class MainActivity extends AppCompatActivity
     public void effectSwitched(String s) {
 
     }
+    //endregion
 }

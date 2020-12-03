@@ -405,16 +405,14 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                     provideByteArrayFrame(data, NV21, captureWidth,
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
-                   /* if (lastFrame != null ) {
-                       *//* provideBufferFrame(frameDeepAr, ARGB, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());*//*
+                    //todo uncomment this part of code. This is causing issue we want to send the last frame rendered by deepAR
+                    /*if (lastFrame != null ) {
                         provideBufferFrame(lastFrame, 11, captureWidth,
                                 captureHeight, currentRotation, isFrontCamera());
                     } else*/
                         provideByteArrayFrame(data, NV21, captureWidth,
                                 captureHeight, currentRotation, isFrontCamera());
                 }
-
                 // Give the video buffer to the camera service again.
                 camera.addCallbackBuffer(data);
             }
