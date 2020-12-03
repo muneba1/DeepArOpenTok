@@ -2,7 +2,9 @@ package com.tokbox.android.tutorials.videocall.capturer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
@@ -20,6 +22,8 @@ import com.opentok.android.BaseVideoCapturer;
 import com.opentok.android.Publisher;
 import com.opentok.android.VideoUtils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Comparator;
@@ -94,9 +98,11 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
             }
         }
     };
+    Context context;
 
     public CustomVideoCapturer(Context context, DeepAR deepAR, Publisher.CameraCaptureResolution resolution,
                                Publisher.CameraCaptureFrameRate fps) {
+        this.context = context;
         this.cameraIndex = getCameraIndexUsingFront(true);
         this.deepAR = deepAR;
         // Get current display to query UI orientation
@@ -406,18 +412,52 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
                     //todo uncomment this part of code. This is causing issue we want to send the last frame rendered by deepAR
-                    /*if (lastFrame != null ) {
-                        provideBufferFrame(lastFrame, 11, captureWidth,
+//                    if (lastFrame != null) {
+
+                        Bitmap bmp = loadBitmapFromAssets(context, "asd.jpg");
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+                        int bytes = bmp.getByteCount();
+                        ByteBuffer buffer = ByteBuffer.allocate(bytes);
+                        bmp.copyPixelsToBuffer(buffer);
+
+                        provideBufferFrame(buffer, 11, captureWidth,
                                 captureHeight, currentRotation, isFrontCamera());
-                    } else*/
-                        provideByteArrayFrame(data, NV21, captureWidth,
+                   /* } else {
+
+
+                        Bitmap bmp = loadBitmapFromAssets(context, "asd.jpg");
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+
+                        provideByteArrayFrame(byteArray, NV21, captureWidth,
                                 captureHeight, currentRotation, isFrontCamera());
+                    }*/
                 }
                 // Give the video buffer to the camera service again.
                 camera.addCallbackBuffer(data);
             }
         }
         previewBufferLock.unlock();
+    }
+
+    public Bitmap loadBitmapFromAssets(Context context, String path) {
+        InputStream stream = null;
+        try {
+            stream = context.getAssets().open(path);
+            return BitmapFactory.decodeStream(stream);
+        } catch (Exception ignored) {
+        } finally {
+            try {
+                if (stream != null) {
+                    stream.close();
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return null;
     }
 
     public void setPublisher(Publisher publisher) {
