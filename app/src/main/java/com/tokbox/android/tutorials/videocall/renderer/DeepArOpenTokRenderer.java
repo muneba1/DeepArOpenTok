@@ -32,7 +32,7 @@ public class DeepArOpenTokRenderer extends BaseVideoRenderer {
     @Override
     public void onFrame(Frame frame) {
         ByteBuffer imageBuffer = frame.getBuffer();
-        deepAR.receiveFrame(imageBuffer, frame.getWidth(), frame.getHeight(), 0, true);
+        deepAR.receiveFrame(imageBuffer, frame.getWidth(), frame.getHeight(), 0, false);
         mRenderView.requestRender();
     }
 

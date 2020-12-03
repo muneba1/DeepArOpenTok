@@ -197,7 +197,7 @@ public class DeepARRenderer implements GLSurfaceView.Renderer {
         GLES20.glDisableVertexAttribArray(uvHandle);
         GLES20.glUseProgram(0);
 
-       /* if (callInProgress) {
+       /* if (callInProgress) {//todo need to figure out opentok alternative for this
             AgoraVideoFrame frame = new AgoraVideoFrame();
             frame.textureID = texture;
             frame.height = textureHeight;
