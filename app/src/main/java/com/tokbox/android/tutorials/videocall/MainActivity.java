@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         deepAR.setLicenseKey("f95428b664031cb8a0b1313aa45665694d052c26a2e7695fbab25543e209fbd11446b44bbcc18a92");
         deepAR.initialize(this, this);
         deepAR.changeLiveMode(true);
-        // initialize view objects from your layout
+        deepAR.startCapture();
         mPublisherViewContainer = (FrameLayout) findViewById(R.id.publisher_container);
         mSubscriberViewContainer = (FrameLayout) findViewById(R.id.subscriber_container);
         requestPermissions();
@@ -208,7 +208,8 @@ public class MainActivity extends AppCompatActivity
                 .name("Bob")
                 .audioTrack(false)
                 .videoTrack(true)
-                .renderer(new BasicCustomVideoRenderer(this,renderer))
+                .capturer(new DeepArVideoCapture())
+                //.renderer(new BasicCustomVideoRenderer(this, renderer))
                 .build();
 
         mPublisher.setPublisherListener(this);
@@ -409,6 +410,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void initialized() {
         deepAR.switchEffect("effect", "file:///android_asset/beach1");
+        deepAR.startCapture();
     }
 
 
@@ -424,7 +426,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void frameAvailable(Image image) {
-
+        DeepArVideoCapture deepArVideoCapture = new DeepArVideoCapture();
+//        deepArVideoCapture.provideBufferFrame(image.getHardwareBuffer());
     }
 
     @Override
