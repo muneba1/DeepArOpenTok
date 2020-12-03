@@ -26,7 +26,7 @@ public class BlackWhiteVideoRender extends BaseVideoRenderer {
         mRenderer = new DeepARRenderer(deepAR);
         mRenderView.setRenderer(mRenderer);
         this.deepAR = deepAR;
-        mRenderView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        mRenderView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
     @Override

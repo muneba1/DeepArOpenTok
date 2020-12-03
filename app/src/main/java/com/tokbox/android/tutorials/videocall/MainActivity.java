@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.media.ImageReader;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,8 @@ import com.tokbox.android.tutorials.basicvideochat.R;
 import com.tokbox.android.tutorials.videocall.renderer.BlackWhiteVideoRender;
 import com.tokbox.android.tutorials.videocall.renderer.DeepARRenderer;
 
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 import ai.deepar.ar.ARErrorType;
@@ -448,10 +451,75 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void frameAvailable(Image image) {
-        if (baseVideoCapturer != null) {
-            baseVideoCapturer.lastFrame = image;
+       /* ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
+        baseVideoCapturer.lastFrame = buffer;
+*/
+        if(image!=null){
+            final Image.Plane[] planes = image.getPlanes();
+            int width_ = image.getWidth();
+            int height_ = image.getHeight();
+            int row_stride_ = planes[0].getRowStride();
+            ByteBuffer buf = deepCopy(planes[0].getBuffer());
+            baseVideoCapturer.lastFrame = buf;
         }
+       /* int[] frame;
+        Bitmap bitmapFromImageReader = getBitmapFromImageReader(image);
+        if (bitmapFromImageReader != null) {
+            baseVideoCapturer.setFrame(bitmapFromImageReader);
+            *//*if (baseVideoCapturer.lastFrame == null) {
+                baseVideoCapturer.lastFrame = ByteBuffer.allocate(1000000);
+            }
+            baseVideoCapturer.lastFrame.clear();
+            bitmapFromImageReader.copyPixelsToBuffer(baseVideoCapturer.lastFrame);*//*
+        }*/
+
+       /* if (baseVideoCapturer != null && image != null) {
+            if (baseVideoCapturer.lastFrame == null)
+                deep
+                baseVideoCapturer.lastFrame = ByteBuffer.allocate(1000000);
+            baseVideoCapturer.lastFrame.clear();
+            for (int i = 0; i < image.getPlanes().length; i++) {
+                baseVideoCapturer.lastFrame.put(image.getPlanes()[i].getBuffer());
+            }
+        }*/
         Log.d(TAG, "frameAvailable: image");
+    }
+
+
+    public static Bitmap getBitmapFromImageReader(Image image) {
+        if (image == null)
+            return null;
+        Bitmap bitmap;
+
+        //get image buffer
+        final Image.Plane[] planes = image.getPlanes();
+        final ByteBuffer buffer = planes[0].getBuffer();
+
+        int pixelStride = planes[0].getPixelStride();
+        int rowStride = planes[0].getRowStride();
+        int rowPadding = rowStride - pixelStride * image.getWidth();
+        // create bitmap
+        bitmap = Bitmap.createBitmap(image.getWidth() + rowPadding / pixelStride, image.getHeight(), Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(buffer);
+        image.close();
+        return bitmap;
+    }
+
+    private ByteBuffer deepCopy(ByteBuffer source) {
+
+        int sourceP = source.position();
+        int sourceL = source.limit();
+
+        ByteBuffer target = ByteBuffer.allocateDirect(source.remaining());
+
+        target.put(source);
+        target.flip();
+
+        source.position(sourceP);
+        source.limit(sourceL);
+        return target;
     }
 
     @Override

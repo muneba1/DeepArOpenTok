@@ -2,6 +2,7 @@ package com.tokbox.android.tutorials.videocall;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
@@ -20,6 +21,7 @@ import com.opentok.android.BaseVideoCapturer;
 import com.opentok.android.Publisher;
 import com.opentok.android.VideoUtils;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -74,7 +76,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
     int[] frame;
     Handler handler = new Handler();
 
-    public Image lastFrame = null;
+    public ByteBuffer lastFrame = null;
 
     Runnable newFrame = new Runnable() {
         @Override
@@ -389,6 +391,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
+        Log.d("XD", "onPreviewFrame: threadId->" + Thread.currentThread().getId());
         previewBufferLock.lock();
 
         if (isCaptureRunning) {
@@ -404,8 +407,10 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                     provideByteArrayFrame(data, NV21, captureWidth,
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
-                    if (lastFrame != null) {
-                        provideBufferFrame(lastFrame.getPlanes()[0].getBuffer(), NV21, captureWidth,
+                    if (lastFrame != null ) {
+                       /* provideBufferFrame(frameDeepAr, ARGB, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());*/
+                        provideBufferFrame(lastFrame, 11, captureWidth,
                                 captureHeight, currentRotation, isFrontCamera());
                     } else
                         provideByteArrayFrame(data, NV21, captureWidth,
@@ -585,5 +590,12 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         if (preferredFps < range[0] || preferredFps > range[1]) {
             Log.w(LOG_TAG, "Closest fps range found: " + (range[0] / 1000) + (range[1] / 1000) + "for desired fps: " + (preferredFps / 1000));
         }
+    }
+
+    private int[] frameDeepAr;
+
+    public void setFrame(Bitmap bitmap) {
+        frameDeepAr = new int[width * height];
+        bitmap.getPixels(frameDeepAr, 0, width, 0, 0, width, height);
     }
 }
