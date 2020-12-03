@@ -198,6 +198,7 @@ public class MainActivity extends AppCompatActivity
             surfaceView = ((GLSurfaceView) mPublisher.getView());
             surfaceView.setZOrderOnTop(true);
         }
+
         mSession.publish(mPublisher);
     }
 
@@ -348,7 +349,12 @@ public class MainActivity extends AppCompatActivity
     public void frameAvailable(Image image) {
         if (image != null) {
             final Image.Plane[] planes = image.getPlanes();
-            baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
+            Bitmap bitmapFromImageReader = Helper.getBitmapFromImageReader(image);
+            if(bitmapFromImageReader!=null){
+                baseVideoCapturer.newFrameProcessed(bitmapFromImageReader);
+            }
+
+            //baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
         }
         Log.d(TAG, "frameAvailable: image");
     }
