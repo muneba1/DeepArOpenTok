@@ -159,7 +159,7 @@ public class DeepARRenderer implements GLSurfaceView.Renderer {
 
 
         deepAR.setRenderSurface(surface, textureWidth, textureHeight);
-        deepAR.startCapture();
+
     }
 
     @Override

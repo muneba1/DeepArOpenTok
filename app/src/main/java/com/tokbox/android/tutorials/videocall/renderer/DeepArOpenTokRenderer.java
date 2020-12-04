@@ -33,6 +33,10 @@ public class DeepArOpenTokRenderer extends BaseVideoRenderer {
         mRenderView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
+    public DeepARRenderer getmRenderer() {
+        return mRenderer;
+    }
+
     @Override
     public void onFrame(Frame frame) {
         ByteBuffer imageBuffer = frame.getBuffer();

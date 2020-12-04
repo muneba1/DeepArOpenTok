@@ -132,11 +132,11 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
     }
 
     public void newFrameProcessed(final Bitmap bitmap){
-        frame2 = new int[width * height];
+        frame2 = new int[448 * 590];
 
         // Canvas canvas = new Canvas(bmp);
         //canvas.save();
-        bitmap.getPixels(frame2, 0, width, 0, 0, width, height);
+        bitmap.getPixels(frame2, 0, 448, 0, 0, 448, 590);
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -144,7 +144,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         int bytes = bitmap.getByteCount();
         buffer = ByteBuffer.allocate(bytes);
         bitmap.copyPixelsToBuffer(buffer);
-        provideIntArrayFrame(frame2, ARGB, width, height, 0, false);
+        provideIntArrayFrame(frame2, ARGB, 448, 590, 0, false);
     }
 
     public synchronized void init() {
@@ -285,7 +285,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
             settings.fps = framerate;
             settings.width = resolution.width;
             settings.height = resolution.height;
-            settings.format = ARGB;
+            //settings.format = ARGB;
         }
 
         return settings;
@@ -445,12 +445,13 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
                     //todo uncomment this part of code. This is causing issue we want to send the last frame rendered by deepAR
-                    /*if (lastFrame != null ) {
-                        provideBufferFrame(lastFrame, 11, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());
+                    /*if (frame2 != null && frame2.length>0) {
+                        provideIntArrayFrame(frame2, ARGB, width, height, 0, false);
+                        *//*provideBufferFrame(lastFrame, 11, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());*//*
                     } else*/
-                        provideByteArrayFrame(data, NV21, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());
+                      /*  provideByteArrayFrame(data, NV21, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());*/
                 }
                 // Give the video buffer to the camera service again.
                 camera.addCallbackBuffer(data);

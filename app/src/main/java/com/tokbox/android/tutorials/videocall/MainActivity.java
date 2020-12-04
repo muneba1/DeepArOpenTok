@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         deepAR.setLicenseKey("f95428b664031cb8a0b1313aa45665694d052c26a2e7695fbab25543e209fbd11446b44bbcc18a92");
         deepAR.initialize(this, this);
 
+
         mPublisherViewContainer = (FrameLayout) findViewById(R.id.publisher_container);
         mSubscriberViewContainer = (FrameLayout) findViewById(R.id.subscriber_container);
         requestPermissions();
@@ -99,6 +100,24 @@ public class MainActivity extends AppCompatActivity
         if (surfaceView != null) {
             surfaceView.onResume();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DeepARRenderer renderer = new DeepARRenderer(deepAR);
+
+        surfaceView = new GLSurfaceView(this);
+        surfaceView.setEGLContextClientVersion(2);
+        surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+
+        surfaceView.setEGLContextFactory(new DeepARRenderer.MyContextFactory(renderer));
+
+        surfaceView.setRenderer(renderer);
+        surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+        FrameLayout local = findViewById(R.id.publisher_container);
+        local.addView(surfaceView);
     }
 
     @Override
@@ -332,6 +351,7 @@ public class MainActivity extends AppCompatActivity
     public void initialized() {
         Log.d(TAG, "initialized: deepAR");
         deepAR.switchEffect("mask", "file:///android_asset/blur_high");
+        deepAR.startCapture();
     }
 
 
@@ -350,8 +370,8 @@ public class MainActivity extends AppCompatActivity
         if (image != null) {
             final Image.Plane[] planes = image.getPlanes();
             Bitmap bitmapFromImageReader = Helper.getBitmapFromImageReader(image);
-            if(bitmapFromImageReader!=null){
-                baseVideoCapturer.newFrameProcessed(bitmapFromImageReader);
+            if(bitmapFromImageReader!=null && baseVideoCapturer!=null){
+               baseVideoCapturer.newFrameProcessed(bitmapFromImageReader);
             }
 
             //baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
