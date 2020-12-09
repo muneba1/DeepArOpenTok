@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
 import android.graphics.SurfaceTexture;
@@ -76,6 +77,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
     int width = 0;
     int height = 0;
     int[] frame;
+    int[] frame2;
     Handler handler = new Handler();
 
     public ByteBuffer lastFrame = null;
@@ -91,6 +93,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                     width = resolution.width;
                     height = resolution.height;
                     frame = new int[width * height];
+                    deepAR.setOffscreenRendering(width,height);
                 }
 
                 provideIntArrayFrame(frame, ARGB, width, height, 0, false);
@@ -99,6 +102,8 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         }
     };
     Context context;
+    ByteBuffer buffer;
+
 
     public CustomVideoCapturer(Context context, DeepAR deepAR, Publisher.CameraCaptureResolution resolution,
                                Publisher.CameraCaptureFrameRate fps) {
@@ -111,6 +116,35 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         currentDisplay = windowManager.getDefaultDisplay();
         this.preferredFramerate = fps;
         this.preferredResolution = resolution;
+        frame2 = new int[564 * 846];
+        Bitmap bmp = loadBitmapFromAssets(context, "asd.jpg");
+
+       // Canvas canvas = new Canvas(bmp);
+        //canvas.save();
+        bmp.getPixels(frame2, 0, 564, 0, 0, 564, 846);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+        int bytes = bmp.getByteCount();
+        buffer = ByteBuffer.allocate(bytes);
+        bmp.copyPixelsToBuffer(buffer);
+    }
+
+    public void newFrameProcessed(final Bitmap bitmap){
+        frame2 = new int[448 * 590];
+
+        // Canvas canvas = new Canvas(bmp);
+        //canvas.save();
+        bitmap.getPixels(frame2, 0, 448, 0, 0, 448, 590);
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+
+        int bytes = bitmap.getByteCount();
+        buffer = ByteBuffer.allocate(bytes);
+        bitmap.copyPixelsToBuffer(buffer);
+        provideIntArrayFrame(frame2, ARGB, 448, 590, 0, false);
     }
 
     public synchronized void init() {
@@ -251,7 +285,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
             settings.fps = framerate;
             settings.width = resolution.width;
             settings.height = resolution.height;
-            settings.format = ARGB;
+            //settings.format = ARGB;
         }
 
         return settings;
@@ -395,7 +429,6 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        Log.d("XD", "onPreviewFrame: threadId->" + Thread.currentThread().getId());
         previewBufferLock.lock();
 
         if (isCaptureRunning) {
@@ -412,29 +445,13 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
                     //todo uncomment this part of code. This is causing issue we want to send the last frame rendered by deepAR
-//                    if (lastFrame != null) {
-
-                        Bitmap bmp = loadBitmapFromAssets(context, "asd.jpg");
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-
-                        int bytes = bmp.getByteCount();
-                        ByteBuffer buffer = ByteBuffer.allocate(bytes);
-                        bmp.copyPixelsToBuffer(buffer);
-
-                        provideBufferFrame(buffer, 11, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());
-                   /* } else {
-
-
-                        Bitmap bmp = loadBitmapFromAssets(context, "asd.jpg");
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
-
-                        provideByteArrayFrame(byteArray, NV21, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());
-                    }*/
+                    /*if (frame2 != null && frame2.length>0) {
+                        provideIntArrayFrame(frame2, ARGB, width, height, 0, false);
+                        *//*provideBufferFrame(lastFrame, 11, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());*//*
+                    } else*/
+                      /*  provideByteArrayFrame(data, NV21, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());*/
                 }
                 // Give the video buffer to the camera service again.
                 camera.addCallbackBuffer(data);

@@ -33,22 +33,13 @@ public class DeepArOpenTokRenderer extends BaseVideoRenderer {
         mRenderView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
+    public DeepARRenderer getmRenderer() {
+        return mRenderer;
+    }
+
     @Override
     public void onFrame(Frame frame) {
         ByteBuffer imageBuffer = frame.getBuffer();
-//        Bitmap bmp = loadBitmapFromAssets(context, "asd.jpg");
-//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//
-//        int bytes = bmp.getByteCount();
-////or we can calculate bytes this way. Use a different value than 4 if you don't use 32bit images.
-////int bytes = b.getWidth()*b.getHeight()*4;
-//
-//        ByteBuffer buffer = ByteBuffer.allocate(bytes); //Create a new buffer
-//        bmp.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
-
-
-
         deepAR.receiveFrame(imageBuffer, frame.getWidth(), frame.getHeight(), 0, true);
         mRenderView.requestRender();
     }
