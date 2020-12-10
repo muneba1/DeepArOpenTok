@@ -23,11 +23,10 @@ import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.tokbox.android.tutorials.basicvideochat.R;
 import com.tokbox.android.tutorials.videocall.capturer.CustomVideoCapturer;
-import com.tokbox.android.tutorials.videocall.renderer.DeepArOpenTokRenderer;
+import com.tokbox.android.tutorials.videocall.capturer.CustomVideoCapturerV2;
 import com.tokbox.android.tutorials.videocall.renderer.DeepARRenderer;
-import com.tokbox.android.tutorials.videocall.utils.Helper;
+import com.tokbox.android.tutorials.videocall.renderer.DeepArOpenTokRenderer;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import ai.deepar.ar.ARErrorType;
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity
 
     private DeepAR deepAR;
     private GLSurfaceView surfaceView;
-    private CustomVideoCapturer baseVideoCapturer;
+    private CustomVideoCapturerV2 baseVideoCapturer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,14 +197,13 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnected(Session session) {
         Log.d(LOG_TAG, "onConnected: Connected to session: " + session.getSessionId());
-        baseVideoCapturer = new CustomVideoCapturer(this, deepAR, Publisher.CameraCaptureResolution.HIGH, Publisher.CameraCaptureFrameRate.FPS_30);
+        baseVideoCapturer = new CustomVideoCapturerV2(this, deepAR, Publisher.CameraCaptureResolution.HIGH, Publisher.CameraCaptureFrameRate.FPS_30);
         DeepArOpenTokRenderer videoRenderer1 = new DeepArOpenTokRenderer(this, deepAR);
         mPublisher = new Publisher.Builder(this)
                 .name("Bob")
                 .audioTrack(true)
                 .videoTrack(true)
                 .capturer(baseVideoCapturer)
-                .renderer(videoRenderer1)
                 .build();
         mPublisher.setPublisherListener(this);
         // set publisher video style to fill view
@@ -350,7 +348,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void initialized() {
         Log.d(TAG, "initialized: deepAR");
-        deepAR.switchEffect("mask", "file:///android_asset/blur_high");
+        deepAR.switchEffect("mask", "file:///android_asset/beach1");
         deepAR.startCapture();
     }
 
