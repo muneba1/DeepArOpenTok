@@ -12,12 +12,14 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
+import android.media.Image;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.opentok.android.BaseVideoCapturer;
 import com.opentok.android.Publisher;
@@ -93,7 +95,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                     width = resolution.width;
                     height = resolution.height;
                     frame = new int[width * height];
-                    deepAR.setOffscreenRendering(width,height);
+                    deepAR.setOffscreenRendering(width, height);
                 }
 
                 provideIntArrayFrame(frame, ARGB, width, height, 0, false);
@@ -119,7 +121,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         frame2 = new int[564 * 846];
         Bitmap bmp = loadBitmapFromAssets(context, "asd.jpg");
 
-       // Canvas canvas = new Canvas(bmp);
+        // Canvas canvas = new Canvas(bmp);
         //canvas.save();
         bmp.getPixels(frame2, 0, 564, 0, 0, 564, 846);
 
@@ -131,8 +133,8 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         bmp.copyPixelsToBuffer(buffer);
     }
 
-    public void newFrameProcessed(final Bitmap bitmap){
-        frame2 = new int[448 * 590];
+    public void newFrameProcessed(final Image image) {
+     /*   frame2 = new int[448 * 590];
 
         // Canvas canvas = new Canvas(bmp);
         //canvas.save();
@@ -144,7 +146,11 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         int bytes = bitmap.getByteCount();
         buffer = ByteBuffer.allocate(bytes);
         bitmap.copyPixelsToBuffer(buffer);
-        provideIntArrayFrame(frame2, ARGB, 448, 590, 0, false);
+        provideIntArrayFrame(frame2, ARGB, 448, 590, 0, false);*/
+        if (image != null) {
+            provideBufferFrame(image.getPlanes()[0].getBuffer(), ABGR, image.getWidth(),
+                    image.getHeight(), 0, false);
+        }
     }
 
     public synchronized void init() {
@@ -445,13 +451,14 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
                     //todo uncomment this part of code. This is causing issue we want to send the last frame rendered by deepAR
-                    /*if (frame2 != null && frame2.length>0) {
+                   /* if (frame2 != null && frame2.length > 0) {
                         provideIntArrayFrame(frame2, ARGB, width, height, 0, false);
-                        *//*provideBufferFrame(lastFrame, 11, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());*//*
-                    } else*/
-                      /*  provideByteArrayFrame(data, NV21, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());*/
+                        provideBufferFrame(lastFrame, 11, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());
+                    } else
+*/
+                    provideByteArrayFrame(data, NV21, captureWidth,
+                            captureHeight, currentRotation, isFrontCamera());
                 }
                 // Give the video buffer to the camera service again.
                 camera.addCallbackBuffer(data);

@@ -367,16 +367,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void frameAvailable(Image image) {
-        if (image != null) {
-            final Image.Plane[] planes = image.getPlanes();
-            Bitmap bitmapFromImageReader = Helper.getBitmapFromImageReader(image);
-            if(bitmapFromImageReader!=null && baseVideoCapturer!=null){
-               baseVideoCapturer.newFrameProcessed(bitmapFromImageReader);
+//        if (image != null) {
+//            final Image.Plane[] planes = image.getPlanes();
+//            Bitmap bitmapFromImageReader = Helper.getBitmapFromImageReader(image);
+            if( baseVideoCapturer!=null){
+               baseVideoCapturer.newFrameProcessed(image);
             }
-
-            //baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
-        }
-        Log.d(TAG, "frameAvailable: image");
+//
+//            //baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
+//        }
+//        Log.d(TAG, "frameAvailable: image");
     }
 
     @Override
