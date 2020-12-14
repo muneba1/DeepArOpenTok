@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 import android.view.View;
 
 import com.opentok.android.BaseVideoRenderer;
@@ -24,12 +25,11 @@ public class DeepArOpenTokRenderer extends BaseVideoRenderer {
 
     public DeepArOpenTokRenderer(Context context, DeepAR deepAR) {
         this.context = context;
+        this.deepAR = deepAR;
         mRenderView = new GLSurfaceView(context);
         mRenderView.setEGLContextClientVersion(2);
-
         mRenderer = new DeepARRenderer(deepAR);
         mRenderView.setRenderer(mRenderer);
-        this.deepAR = deepAR;
         mRenderView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
@@ -40,6 +40,7 @@ public class DeepArOpenTokRenderer extends BaseVideoRenderer {
     @Override
     public void onFrame(Frame frame) {
         ByteBuffer imageBuffer = frame.getBuffer();
+        Log.d("XD", "onFrame: ");
         deepAR.receiveFrame(imageBuffer, frame.getWidth(), frame.getHeight(), 0, true);
         mRenderView.requestRender();
     }

@@ -6,6 +6,7 @@ import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
+import android.util.Log;
 import android.view.Surface;
 
 import com.opentok.android.BaseVideoRenderer;
@@ -129,6 +130,7 @@ public class DeepARRenderer implements GLSurfaceView.Renderer {
 
     @Override
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
+        Log.d("XD", "onSurfaceChanged: ");
         GLES20.glViewport(0, 0, width, height);
 
         int[] textures = new int[1];
@@ -234,7 +236,6 @@ public class DeepARRenderer implements GLSurfaceView.Renderer {
             int[] attrib_list = {EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
                     EGL10.EGL_NONE};
             renderer.mEGLCurrentContext = egl.eglCreateContext(display, config, EGL10.EGL_NO_CONTEXT, attrib_list);
-            ;
             return renderer.mEGLCurrentContext;
         }
 

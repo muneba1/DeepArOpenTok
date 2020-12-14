@@ -27,6 +27,7 @@ import com.opentok.android.VideoUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.Comparator;
@@ -83,6 +84,8 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
     Handler handler = new Handler();
 
     public ByteBuffer lastFrame = null;
+    private int imageHeight;
+    private int imageWidth;
 
     Runnable newFrame = new Runnable() {
         @Override
@@ -148,6 +151,9 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         bitmap.copyPixelsToBuffer(buffer);
         provideIntArrayFrame(frame2, ARGB, 448, 590, 0, false);*/
         if (image != null) {
+            lastFrame = image.getPlanes()[0].getBuffer();
+            imageWidth = image.getWidth();
+            imageHeight = image.getHeight();
             provideBufferFrame(image.getPlanes()[0].getBuffer(), ABGR, image.getWidth(),
                     image.getHeight(), 0, false);
         }
@@ -433,8 +439,10 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         this.metadataSource = metadataSource;
     }
 
+
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
+        Log.d("XD", "onPreviewFrame: new preview frame");
         previewBufferLock.lock();
 
         if (isCaptureRunning) {
@@ -451,14 +459,16 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                             captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
                     //todo uncomment this part of code. This is causing issue we want to send the last frame rendered by deepAR
-                   /* if (frame2 != null && frame2.length > 0) {
-                        provideIntArrayFrame(frame2, ARGB, width, height, 0, false);
+                 /*   if (lastFrame != null ) {
+                        provideBufferFrame(lastFrame, ABGR, imageWidth,
+                                imageHeight, 0, false);
+                  *//*      provideIntArrayFrame(frame2, ARGB, width, height, 0, false);
                         provideBufferFrame(lastFrame, 11, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());
-                    } else
-*/
-                    provideByteArrayFrame(data, NV21, captureWidth,
-                            captureHeight, currentRotation, isFrontCamera());
+                                captureHeight, currentRotation, isFrontCamera());*//*
+                    } else*/
+                        //deepAR.receiveFrame(ByteBuffer.wrap(data), captureWidth, captureHeight, 0, true);
+                      /*  provideByteArrayFrame(data, NV21, captureWidth,
+                                captureHeight, currentRotation, isFrontCamera());*/
                 }
                 // Give the video buffer to the camera service again.
                 camera.addCallbackBuffer(data);

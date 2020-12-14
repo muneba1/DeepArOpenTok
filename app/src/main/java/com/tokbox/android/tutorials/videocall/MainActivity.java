@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.opengl.GLSurfaceView;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.opentok.android.BaseVideoRenderer;
@@ -23,6 +25,8 @@ import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.tokbox.android.tutorials.basicvideochat.R;
 import com.tokbox.android.tutorials.videocall.capturer.CustomVideoCapturer;
+import com.tokbox.android.tutorials.videocall.capturer.CustomVideoCapturerCamera2;
+import com.tokbox.android.tutorials.videocall.renderer.BlackWhiteVideoRender;
 import com.tokbox.android.tutorials.videocall.renderer.DeepArOpenTokRenderer;
 import com.tokbox.android.tutorials.videocall.renderer.DeepARRenderer;
 import com.tokbox.android.tutorials.videocall.utils.Helper;
@@ -105,7 +109,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        DeepARRenderer renderer = new DeepARRenderer(deepAR);
+      /*  DeepARRenderer renderer = new DeepARRenderer(deepAR);
 
         surfaceView = new GLSurfaceView(this);
         surfaceView.setEGLContextClientVersion(2);
@@ -117,7 +121,7 @@ public class MainActivity extends AppCompatActivity
         surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
 
         FrameLayout local = findViewById(R.id.publisher_container);
-        local.addView(surfaceView);
+        local.addView(surfaceView);*/
     }
 
     @Override
@@ -193,20 +197,24 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
     //endregion
-
+    private CustomVideoCapturerCamera2 customVideoCapturerCamera2;
     //region Session Listener methods
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onConnected(Session session) {
         Log.d(LOG_TAG, "onConnected: Connected to session: " + session.getSessionId());
         baseVideoCapturer = new CustomVideoCapturer(this, deepAR, Publisher.CameraCaptureResolution.HIGH, Publisher.CameraCaptureFrameRate.FPS_30);
+        customVideoCapturerCamera2 = new CustomVideoCapturerCamera2(this, Publisher.CameraCaptureResolution.HIGH, Publisher.CameraCaptureFrameRate.FPS_30);
+
         DeepArOpenTokRenderer videoRenderer1 = new DeepArOpenTokRenderer(this, deepAR);
         mPublisher = new Publisher.Builder(this)
                 .name("Bob")
                 .audioTrack(true)
                 .videoTrack(true)
-                .capturer(baseVideoCapturer)
+                .capturer(customVideoCapturerCamera2)
                 .renderer(videoRenderer1)
                 .build();
+        mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);
         mPublisher.setPublisherListener(this);
         // set publisher video style to fill view
         mPublisher.getRenderer().setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
@@ -214,8 +222,23 @@ public class MainActivity extends AppCompatActivity
         mPublisherViewContainer.addView(mPublisher.getView());
 
         if (mPublisher.getView() instanceof GLSurfaceView) {
+
+
+
+
+            //surfaceView.setRenderer(renderer);
+//            surfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+
+            //FrameLayout local = findViewById(R.id.publisher_container);
+        }
+
+        if (mPublisher.getView() instanceof GLSurfaceView) {
             surfaceView = ((GLSurfaceView) mPublisher.getView());
             surfaceView.setZOrderOnTop(true);
+            surfaceView = new GLSurfaceView(this);
+            surfaceView.setEGLContextClientVersion(2);
+            surfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+            surfaceView.setEGLContextFactory(new DeepARRenderer.MyContextFactory(videoRenderer1.getmRenderer()));
         }
 
         mSession.publish(mPublisher);
@@ -365,18 +388,48 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "imageVisibilityChanged: ");
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void frameAvailable(Image image) {
 //        if (image != null) {
 //            final Image.Plane[] planes = image.getPlanes();
 //            Bitmap bitmapFromImageReader = Helper.getBitmapFromImageReader(image);
-            if( baseVideoCapturer!=null){
-               baseVideoCapturer.newFrameProcessed(image);
-            }
+            //if( baseVideoCapturer!=null){
+             // baseVideoCapturer.newFrameProcessed(image);
+           // }
 //
 //            //baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
 //        }
-//        Log.d(TAG, "frameAvailable: image");
+
+        if (image != null) {
+            Image.Plane[] planes = image.getPlanes();
+            if(planes.length>0){
+                customVideoCapturerCamera2.plane0 = planes[0].getBuffer();
+                customVideoCapturerCamera2.pixelStride0 = planes[0].getPixelStride();
+                customVideoCapturerCamera2.rowStride0 = planes[0].getRowStride();
+            }
+            if(planes.length>1){
+                customVideoCapturerCamera2.plane1 = planes[1].getBuffer();
+                customVideoCapturerCamera2.pixelStride1 = planes[1].getPixelStride();
+                customVideoCapturerCamera2.rowsStride1 = planes[1].getRowStride();
+            }
+
+            if(planes.length>2){
+                customVideoCapturerCamera2.plane2 = planes[2].getBuffer();
+                customVideoCapturerCamera2.pixelStride2 = planes[2].getPixelStride();
+                customVideoCapturerCamera2.rowsStride2 = planes[2].getRowStride();
+            }
+
+            customVideoCapturerCamera2.width = image.getWidth();
+            customVideoCapturerCamera2.height = image.getHeight();
+        }
+
+        if(image != null){
+            Bitmap bitmapFromImageReader = Helper.getBitmapFromImageReader(image);
+            if(bitmapFromImageReader != null)
+                bitmapFromImageReader.getDensity();
+        }
+        Log.d("XD", "frameAvailable: image");
     }
 
     @Override
