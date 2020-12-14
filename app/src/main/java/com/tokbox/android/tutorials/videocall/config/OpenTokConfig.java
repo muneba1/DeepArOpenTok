@@ -1,4 +1,4 @@
-package com.tokbox.android.tutorials.videocall;
+package com.tokbox.android.tutorials.videocall.config;
 
 import android.webkit.URLUtil;
 
@@ -9,9 +9,9 @@ public class OpenTokConfig {
     // Replace with your OpenTok API key
     public static final String API_KEY = "46994444";
     // Replace with a generated Session ID
-    public static final String SESSION_ID = "2_MX40Njk5NDQ0NH5-MTYwNzg4MTc2NTc4NH5TVlNqZ1ptNUszaUQ0eWZkVjFRNDFiaDN-fg";
+    public static final String SESSION_ID = "2_MX40Njk5NDQ0NH5-MTYwNzk1NTY4OTI4OX5RbGkreVBJb0VnYXFCa21IekZ1YXprZkF-fg";
     // Replace with a generated token (from the dashboard or using an OpenTok server SDK)
-    public static final String TOKEN = "T1==cGFydG5lcl9pZD00Njk5NDQ0NCZzaWc9ZDZhZmVhNjRkODJhYjMxMzhkYjIxZjVjZWE3NWJlZmQyNDNkOGY4YTpzZXNzaW9uX2lkPTJfTVg0ME5qazVORFEwTkg1LU1UWXdOemc0TVRjMk5UYzROSDVUVmxOcVoxcHROVXN6YVVRMGVXWmtWakZSTkRGaWFETi1mZyZjcmVhdGVfdGltZT0xNjA3ODgxNzY2Jm5vbmNlPTAuODg4NTU2NTUyNzI1MjEzMSZyb2xlPW1vZGVyYXRvciZleHBpcmVfdGltZT0xNjEwNDczNzY2JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
+    public static final String TOKEN = "T1==cGFydG5lcl9pZD00Njk5NDQ0NCZzaWc9YWQ4YzE5MmUzNWQ5NzA1ODlmMDBlNTUzOGQ5MzJiODI4NTU5NmNmZDpzZXNzaW9uX2lkPTJfTVg0ME5qazVORFEwTkg1LU1UWXdOemsxTlRZNE9USTRPWDVSYkdrcmVWQkpiMFZuWVhGQ2EyMUlla1oxWVhwclprRi1mZyZjcmVhdGVfdGltZT0xNjA3OTU1Njg5Jm5vbmNlPTAuMTA3MjA2ODgwNjg2NzQ0MTEmcm9sZT1tb2RlcmF0b3ImZXhwaXJlX3RpbWU9MTYxMDU0NzY4OSZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
 
     /*                           ***** OPTIONAL *****
      If you have set up a server to provide session information replace the null value

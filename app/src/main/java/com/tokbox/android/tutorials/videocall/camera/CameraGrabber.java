@@ -1,4 +1,4 @@
-package ai.deepar.deepar_example;
+package com.tokbox.android.tutorials.videocall.camera;
 
 import android.graphics.ImageFormat;
 import android.graphics.PixelFormat;
@@ -27,7 +27,7 @@ import ai.deepar.ar.DeepAR;
 
 public class CameraGrabber
 {
-    private static final String TAG = ai.deepar.deepar_example.CameraGrabber.class.getSimpleName();
+    private static final String TAG = CameraGrabber.class.getSimpleName();
 
     private static final int NUMBER_OF_BUFFERS=2;
 
@@ -43,7 +43,7 @@ public class CameraGrabber
     }
 
     public CameraGrabber(int cameraDevice) {
-        ai.deepar.deepar_example.CameraGrabber.currentCameraDevice = cameraDevice;
+        CameraGrabber.currentCameraDevice = cameraDevice;
     }
 
     public void setFrameReceiver(DeepAR receiver) {
@@ -52,7 +52,7 @@ public class CameraGrabber
         }
     }
 
-    public void initCamera(ai.deepar.deepar_example.CameraGrabberListener listener) {
+    public void initCamera(CameraGrabberListener listener) {
         if (mThread == null) {
             mThread = new CameraHandlerThread(listener, width, height, screenOrientation);
         }
@@ -77,7 +77,7 @@ public class CameraGrabber
 
     public void changeCameraDevice(int cameraDevice) {
         currentCameraDevice = cameraDevice;
-        initCamera(new ai.deepar.deepar_example.CameraGrabberListener() {
+        initCamera(new CameraGrabberListener() {
             @Override
             public void onCameraInitialized() {
                 startPreview();
@@ -142,12 +142,12 @@ public class CameraGrabber
         private DeepAR frameReceiver;
         private ByteBuffer[] buffers;
         private int currentBuffer = 0;
-        private ai.deepar.deepar_example.CameraGrabberListener listener;
+        private CameraGrabberListener listener;
         private int cameraOrientation;
         private int width;
         private  int height;
         private  int screenOrientation;
-        CameraHandlerThread(ai.deepar.deepar_example.CameraGrabberListener listener, int width, int height, int screenOrientation) {
+        CameraHandlerThread(CameraGrabberListener listener, int width, int height, int screenOrientation) {
             super("CameraHandlerThread");
 
             this.listener = listener;

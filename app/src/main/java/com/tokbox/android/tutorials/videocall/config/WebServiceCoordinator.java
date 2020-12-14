@@ -1,4 +1,4 @@
-package com.tokbox.android.tutorials.videocall;
+package com.tokbox.android.tutorials.videocall.config;
 
 import android.content.Context;
 import android.util.Log;

@@ -4,23 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.Image;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Surface;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +24,10 @@ import com.opentok.android.PublisherKit;
 import com.opentok.android.Session;
 import com.opentok.android.Stream;
 import com.tokbox.android.tutorials.basicvideochat.R;
-import com.tokbox.android.tutorials.videocall.OpenTokConfig;
+import com.tokbox.android.tutorials.videocall.camera.CameraGrabber;
+import com.tokbox.android.tutorials.videocall.camera.CameraGrabberListener;
+import com.tokbox.android.tutorials.videocall.capturer.ScreensharingCapturer;
+import com.tokbox.android.tutorials.videocall.config.OpenTokConfig;
 import com.tokbox.android.tutorials.videocall.renderer.DeepARRenderer;
 
 import java.util.List;
@@ -48,12 +41,12 @@ import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 
 
-public class MainActivity2 extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements  AREventListener,
         Session.SessionListener, EasyPermissions.PermissionCallbacks,
         Publisher.PublisherListener {
 
-    private ai.deepar.deepar_example.CameraGrabber cameraGrabber;
+    private CameraGrabber cameraGrabber;
     private DeepAR deepAR;
     private Session mSession;
 
@@ -150,7 +143,7 @@ public class MainActivity2 extends AppCompatActivity
     private void requestPermissions() {
         String[] perms = {Manifest.permission.INTERNET, Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            mSession = new Session.Builder(MainActivity2.this, OpenTokConfig.API_KEY, OpenTokConfig.SESSION_ID).build();
+            mSession = new Session.Builder(MainActivity.this, OpenTokConfig.API_KEY, OpenTokConfig.SESSION_ID).build();
             mSession.setSessionListener(this);
             mSession.connect(OpenTokConfig.TOKEN);
         } else {
@@ -171,13 +164,13 @@ public class MainActivity2 extends AppCompatActivity
     }
 
     private void setupCamera() {
-        cameraGrabber = new ai.deepar.deepar_example.CameraGrabber(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        cameraGrabber = new CameraGrabber(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
         // Available 1080p, 720p and 480p resolutions
         cameraGrabber.setResolutionPreset(CameraResolutionPreset.P1280x720);
 
         final Activity context = this;
-        cameraGrabber.initCamera(new ai.deepar.deepar_example.CameraGrabberListener() {
+        cameraGrabber.initCamera(new CameraGrabberListener() {
             @Override
             public void onCameraInitialized() {
                 cameraGrabber.setFrameReceiver(deepAR);
@@ -310,13 +303,13 @@ public class MainActivity2 extends AppCompatActivity
 
     @Override
     public void onConnected(Session session) {
-        screenCapturer = new ScreensharingCapturer(MainActivity2.this,
+        screenCapturer = new ScreensharingCapturer(MainActivity.this,
                 mPublisherViewContainer);
-        mPublisher = new Publisher.Builder(MainActivity2.this)
+        mPublisher = new Publisher.Builder(MainActivity.this)
                 .name("publisher")
                 .capturer(screenCapturer)
                 .build();
-        mPublisher.setPublisherListener(MainActivity2.this);
+        mPublisher.setPublisherListener(MainActivity.this);
         mPublisher.setPublisherVideoType(PublisherKit.PublisherKitVideoType.PublisherKitVideoTypeScreen);
         mPublisher.setAudioFallbackEnabled(false);
 

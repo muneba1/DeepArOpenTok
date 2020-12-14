@@ -1,4 +1,4 @@
-package ai.deepar.deepar_example;
+package com.tokbox.android.tutorials.videocall.camera;
 
 public interface CameraGrabberListener {
     void onCameraInitialized();

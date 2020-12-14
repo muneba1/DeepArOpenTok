@@ -1,4 +1,4 @@
-package com.tokbox.android.tutorials.videocall.screenshare_deepar;
+package com.tokbox.android.tutorials.videocall.capturer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
