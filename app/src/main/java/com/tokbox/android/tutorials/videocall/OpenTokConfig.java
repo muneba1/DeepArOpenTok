@@ -9,9 +9,9 @@ public class OpenTokConfig {
     // Replace with your OpenTok API key
     public static final String API_KEY = "46994444";
     // Replace with a generated Session ID
-    public static final String SESSION_ID = "2_MX40Njk5NDQ0NH5-MTYwNzUxNDk5MTA3M35FL0NOR0tSNFFIQ0lrWnp4eFpIMmFRRWN-fg";
+    public static final String SESSION_ID = "2_MX40Njk5NDQ0NH5-MTYwNzg4MTc2NTc4NH5TVlNqZ1ptNUszaUQ0eWZkVjFRNDFiaDN-fg";
     // Replace with a generated token (from the dashboard or using an OpenTok server SDK)
-    public static final String TOKEN = "T1==cGFydG5lcl9pZD00Njk5NDQ0NCZzaWc9ZDlmYTQ1ZjRlYjBmNzVhNmI5NzI4MzBhODYzNTNjNmZkMTk0Y2EzZDpzZXNzaW9uX2lkPTJfTVg0ME5qazVORFEwTkg1LU1UWXdOelV4TkRrNU1UQTNNMzVGTDBOT1IwdFNORkZJUTBsclducDRlRnBJTW1GUlJXTi1mZyZjcmVhdGVfdGltZT0xNjA3NTE0OTkxJm5vbmNlPTAuMTMyMzE4MTI2MjE3MzQ5MTcmcm9sZT1tb2RlcmF0b3ImZXhwaXJlX3RpbWU9MTYxMDEwNjk5MSZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
+    public static final String TOKEN = "T1==cGFydG5lcl9pZD00Njk5NDQ0NCZzaWc9ZDZhZmVhNjRkODJhYjMxMzhkYjIxZjVjZWE3NWJlZmQyNDNkOGY4YTpzZXNzaW9uX2lkPTJfTVg0ME5qazVORFEwTkg1LU1UWXdOemc0TVRjMk5UYzROSDVUVmxOcVoxcHROVXN6YVVRMGVXWmtWakZSTkRGaWFETi1mZyZjcmVhdGVfdGltZT0xNjA3ODgxNzY2Jm5vbmNlPTAuODg4NTU2NTUyNzI1MjEzMSZyb2xlPW1vZGVyYXRvciZleHBpcmVfdGltZT0xNjEwNDczNzY2JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
 
     /*                           ***** OPTIONAL *****
      If you have set up a server to provide session information replace the null value
