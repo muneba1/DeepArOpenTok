@@ -3,15 +3,16 @@ package com.tokbox.android.tutorials.videocall;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.graphics.Bitmap;
+import android.graphics.SurfaceTexture;
 import android.media.Image;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Surface;
+import android.view.TextureView;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.opentok.android.BaseVideoRenderer;
 import com.opentok.android.OpentokError;
@@ -24,15 +25,15 @@ import com.opentok.android.SubscriberKit;
 import com.tokbox.android.tutorials.basicvideochat.R;
 import com.tokbox.android.tutorials.videocall.capturer.CustomVideoCapturer;
 import com.tokbox.android.tutorials.videocall.renderer.DeepArOpenTokRenderer;
-import com.tokbox.android.tutorials.videocall.renderer.DeepARRenderer;
-import com.tokbox.android.tutorials.videocall.utils.Helper;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 
 import ai.deepar.ar.ARErrorType;
 import ai.deepar.ar.AREventListener;
 import ai.deepar.ar.DeepAR;
+import ai.deepar.ar.DeepARPixelFormat;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity
         WebServiceCoordinator.Listener,
         Session.SessionListener,
         PublisherKit.PublisherListener,
-        SubscriberKit.SubscriberListener, AREventListener {
+        SubscriberKit.SubscriberListener, AREventListener, TextureView.SurfaceTextureListener {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int RC_SETTINGS_SCREEN_PERM = 123;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         deepAR = new DeepAR(this);
-        deepAR.setLicenseKey("f95428b664031cb8a0b1313aa45665694d052c26a2e7695fbab25543e209fbd11446b44bbcc18a92");
+        deepAR.setLicenseKey("937793dcdf2596e5f3d14b3c5317d730680c9530c8c4d2350194df1eb16981d7e307061299c83384");
         deepAR.initialize(this, this);
 
         mPublisherViewContainer = (FrameLayout) findViewById(R.id.publisher_container);
@@ -99,6 +100,21 @@ public class MainActivity extends AppCompatActivity
         if (surfaceView != null) {
             surfaceView.onResume();
         }
+
+        TextureView arView = findViewById(R.id.surface);
+
+        arView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                deepAR.onClick();
+            }
+        });
+
+        arView.setSurfaceTextureListener(this);
+
+        // Surface might already be initialized, so we force the call to onSurfaceChanged
+        arView.setVisibility(View.GONE);
+        arView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -183,10 +199,10 @@ public class MainActivity extends AppCompatActivity
         DeepArOpenTokRenderer videoRenderer1 = new DeepArOpenTokRenderer(this, deepAR);
         mPublisher = new Publisher.Builder(this)
                 .name("Bob")
-                .audioTrack(true)
+                .audioTrack(false)
                 .videoTrack(true)
                 .capturer(baseVideoCapturer)
-                .renderer(videoRenderer1)
+                //.renderer(videoRenderer1)
                 .build();
         mPublisher.setPublisherListener(this);
         mPublisher.getRenderer().setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
@@ -327,8 +343,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void initialized() {
-        Log.d(TAG, "initialized: deepAR");
+        Log.w("deepar", "initialized: deepAR");
         deepAR.switchEffect("mask", "file:///android_asset/blur_high");
+        deepAR.startCapture(720, 1280, 0.0F, 1.0F, 0.0F, 1.0F, DeepARPixelFormat.ARGB_8888);
+        //deepAR.startCapture();
     }
 
 
@@ -344,9 +362,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void frameAvailable(Image image) {
-        if (image != null) {
+        if (image != null && baseVideoCapturer != null) {
+            Log.w("RXLOG", "Frame available width: " + image.getWidth() + " X height: " + image.getHeight());
             final Image.Plane[] planes = image.getPlanes();
-            baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
+            //baseVideoCapturer.lastFrame = Helper.deepCopy(planes[0].getBuffer());
+            baseVideoCapturer.lastFrame = planes[0].getBuffer();
+            baseVideoCapturer.addFrame(image);
         }
         Log.d(TAG, "frameAvailable: image");
     }
@@ -358,6 +379,27 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void effectSwitched(String s) {
+
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable(final SurfaceTexture surface, final int width, final int height) {
+        deepAR.setRenderSurface(new Surface(surface), width, height);
+
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(final SurfaceTexture surface, final int width, final int height) {
+        deepAR.setRenderSurface(new Surface(surface), width, height);
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(final SurfaceTexture surface) {
+        return false;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(final SurfaceTexture surface) {
 
     }
     //endregion

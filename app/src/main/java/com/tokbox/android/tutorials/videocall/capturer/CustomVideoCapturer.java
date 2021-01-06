@@ -9,6 +9,7 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
+import android.media.Image;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
@@ -21,6 +22,7 @@ import com.opentok.android.Publisher;
 import com.opentok.android.VideoUtils;
 
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -34,6 +36,8 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         BaseVideoCapturer.CaptureSwitch {
 
     private static final String LOG_TAG = CustomVideoCapturer.class.getSimpleName();
+    private static final int NUMBER_OF_BUFFERS = 2;
+
     private final DeepAR deepAR;
     private int cameraIndex = 0;
     private Camera camera;
@@ -88,12 +92,14 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                     height = resolution.height;
                     frame = new int[width * height];
                 }
-
-                provideIntArrayFrame(frame, ARGB, width, height, 0, false);
+                Log.w("RXLOGHMM", "new Frame Runnable");
+                //provideIntArrayFrame(frame, ARGB, width, height, 0, false);
                 handler.postDelayed(newFrame, 1000 / fps);
             }
         }
     };
+    private ByteBuffer[] buffers;
+    private int currentBuffer = 0;
 
     public CustomVideoCapturer(Context context, DeepAR deepAR, Publisher.CameraCaptureResolution resolution,
                                Publisher.CameraCaptureFrameRate fps) {
@@ -134,6 +140,9 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
 
             Camera.Parameters parameters = camera.getParameters();
             parameters.setPreviewSize(captureWidth, captureHeight);
+            parameters.setPictureSize(captureWidth, captureHeight);
+            parameters.setPictureFormat(PixelFormat.JPEG);
+            parameters.setJpegQuality(90);
             parameters.setPreviewFormat(PIXEL_FORMAT);
             parameters.setPreviewFpsRange(captureFpsRange[0], captureFpsRange[1]);
 
@@ -150,17 +159,27 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
             }
 
             // Create capture buffers
-            PixelFormat.getPixelFormatInfo(PIXEL_FORMAT, pixelFormat);
+
+            /*PixelFormat.getPixelFormatInfo(PIXEL_FORMAT, pixelFormat);
             int bufSize = captureWidth * captureHeight * pixelFormat.bitsPerPixel
                     / 8;
             byte[] buffer = null;
             for (int i = 0; i < numCaptureBuffers; i++) {
                 buffer = new byte[bufSize];
                 camera.addCallbackBuffer(buffer);
+            }*/
+
+            buffers = new ByteBuffer[NUMBER_OF_BUFFERS];
+            for (int i = 0; i < NUMBER_OF_BUFFERS; i++) {
+                buffers[i] = ByteBuffer.allocateDirect(captureWidth * captureHeight * 3 / 2);
+                buffers[i].order(ByteOrder.nativeOrder());
+                buffers[i].position(0);
+                byte[] buffer = new byte[captureWidth * captureHeight * 3 / 2];
+                camera.addCallbackBuffer(buffer);
             }
 
             try {
-                surfaceTexture = new SurfaceTexture(42);
+                surfaceTexture = new SurfaceTexture(0);
                 camera.setPreviewTexture(surfaceTexture);
 
             } catch (Exception e) {
@@ -172,7 +191,7 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
             camera.startPreview();
 
             previewBufferLock.lock();
-            expectedFrameSize = bufSize;
+            expectedFrameSize = captureWidth * captureHeight * 3 / 2;
 
             previewBufferLock.unlock();
 
@@ -225,6 +244,8 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
 
     @Override
     public CaptureSettings getCaptureSettings() {
+
+        Log.w("RXLOG1", "getCaptureSettings called");
 
         CaptureSettings settings = new CaptureSettings();
         ;
@@ -395,6 +416,20 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
         if (isCaptureRunning) {
             // If StartCapture has been called but not StopCapture
             // Call the C++ layer with the captured frame
+
+            if (deepAR != null && data != null) {
+                buffers[currentBuffer].put(data);
+                buffers[currentBuffer].position(0);
+                if (deepAR != null) {
+                    deepAR.receiveFrame(buffers[currentBuffer], captureWidth, captureHeight, 0, false);
+                }
+                currentBuffer = (currentBuffer + 1) % NUMBER_OF_BUFFERS;
+            }
+
+            if (camera != null) {
+                camera.addCallbackBuffer(data);
+            }
+
             if (data.length == expectedFrameSize) {
 
                 int currentRotation = compensateCameraRotation(currentDisplay
@@ -402,22 +437,35 @@ public class CustomVideoCapturer extends BaseVideoCapturer implements
                 // Send buffer
                 if (metadataSource != null) {
                     byte[] framemetadata = metadataSource.retrieveMetadata();
-                    provideByteArrayFrame(data, NV21, captureWidth,
-                            captureHeight, currentRotation, isFrontCamera(), framemetadata);
+                    Log.w("RXLOGHMM", "Proivide metadata");
+                    //provideByteArrayFrame(data, NV21, captureWidth, captureHeight, currentRotation, isFrontCamera(), framemetadata);
                 } else {
                     //todo uncomment this part of code. This is causing issue we want to send the last frame rendered by deepAR
-                    /*if (lastFrame != null ) {
-                        provideBufferFrame(lastFrame, 11, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());
-                    } else*/
-                        provideByteArrayFrame(data, NV21, captureWidth,
-                                captureHeight, currentRotation, isFrontCamera());
+                    if (lastFrame != null) {
+                        Log.w("RXLOG", "lastFrame width: " + captureWidth + " height: " + captureHeight);
+
+                        /*for (int i = 1; i < 12 ; i++) {
+                            provideBufferFrame(lastFrame, i, 352, 472, 0, false);
+                        }*/
+
+                        //provideByteArrayFrame(lastFrame.array(), 2,captureWidth , captureHeight, currentRotation, isFrontCamera());
+                    } else {
+                        Log.w("RXLOGHMM", "onPreviewFrame");
+                        //provideByteArrayFrame(data, NV21, captureWidth, captureHeight, currentRotation, isFrontCamera());
+                    }
+                    // Give the video buffer to the camera service again.
+                    //camera.addCallbackBuffer(data);
                 }
-                // Give the video buffer to the camera service again.
-                camera.addCallbackBuffer(data);
             }
+            previewBufferLock.unlock();
         }
-        previewBufferLock.unlock();
+    }
+
+    public void addFrame(Image image) {
+        if(isCaptureStarted) {
+            Log.w("RXLOGHMM", "AddFrame");
+            provideBufferFrame(image.getPlanes()[0].getBuffer(), BaseVideoCapturer.ARGB, 720, 1280, 0, false);
+        }
     }
 
     public void setPublisher(Publisher publisher) {

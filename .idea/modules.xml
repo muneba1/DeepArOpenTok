@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DeepArOpenTokOpernTok.iml" filepath="$PROJECT_DIR$/.idea/modules/DeepArOpenTokOpernTok.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DeepArOpenTokOpernTok.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DeepArOpenTokOpernTok.app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/deepar/DeepArOpenTokOpernTok.deepar.iml" filepath="$PROJECT_DIR$/.idea/modules/deepar/DeepArOpenTokOpernTok.deepar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/DeepArOpenTok.iml" filepath="$PROJECT_DIR$/.idea/modules/DeepArOpenTok.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/DeepArOpenTok.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/DeepArOpenTok.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/deepar/DeepArOpenTok.deepar.iml" filepath="$PROJECT_DIR$/.idea/modules/deepar/DeepArOpenTok.deepar.iml" />
     </modules>
   </component>
 </project>

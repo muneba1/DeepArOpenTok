@@ -26,6 +26,11 @@ tools:context="com.tokbox.android.tutorials.videocall.MainActivity">
             android:padding="@dimen/publisher_padding"
             android:background="@color/publisher_border_color" />
 
+        <TextureView
+            android:layout_width="180dp"
+            android:layout_height="240dp"
+            android:id="@+id/surface"/>
+
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

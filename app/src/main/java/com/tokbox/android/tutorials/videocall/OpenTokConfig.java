@@ -7,11 +7,11 @@ public class OpenTokConfig {
     // ***                      https://dashboard.tokbox.com/projects                           ***
 
     // Replace with your OpenTok API key
-    public static final String API_KEY = "46996184";
+    public static final String API_KEY = "46015812";
     // Replace with a generated Session ID
-    public static final String SESSION_ID = "2_MX40Njk5NjE4NH5-MTYwNjk4MTg0MDg1MX5ETG82M2NJWWlpMWl3TXM0M3BNNis3K3R-fg";
+    public static final String SESSION_ID = "1_MX40NjAxNTgxMn5-MTYwOTkyMjU4ODgwM34rWnFleUVacFpzczMvRktCRW9PTmdZMzd-fg";
     // Replace with a generated token (from the dashboard or using an OpenTok server SDK)
-    public static final String TOKEN = "T1==cGFydG5lcl9pZD00Njk5NjE4NCZzaWc9YjhlZDc1NjE1ODQ1NzFlMTRhZGVmMzc4NzBkMzUyM2QzMDE0OTkyMDpzZXNzaW9uX2lkPTJfTVg0ME5qazVOakU0Tkg1LU1UWXdOams0TVRnME1EZzFNWDVFVEc4Mk0yTkpXV2xwTVdsM1RYTTBNM0JOTmlzM0szUi1mZyZjcmVhdGVfdGltZT0xNjA2OTgxODQxJm5vbmNlPTAuMjQwNTc4MzUxNTQ1NDUxODImcm9sZT1tb2RlcmF0b3ImZXhwaXJlX3RpbWU9MTYwNzA2ODI0MSZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ==";
+    public static final String TOKEN = "T1==cGFydG5lcl9pZD00NjAxNTgxMiZzaWc9NDM3YTNlNzU4NGMzNWM5YzExOWQ0MDliODAzYWE1MGNhMWE0YWM3ZjpzZXNzaW9uX2lkPTFfTVg0ME5qQXhOVGd4TW41LU1UWXdPVGt5TWpVNE9EZ3dNMzRyV25GbGVVVmFjRnB6Y3pNdlJrdENSVzlQVG1kWk16ZC1mZyZjcmVhdGVfdGltZT0xNjA5OTIyNTg5Jm5vbmNlPTAuNDMwNzgyMTcwNDYzMzI3JnJvbGU9bW9kZXJhdG9yJmV4cGlyZV90aW1lPTE2MTI1MTQ1ODkmaW5pdGlhbF9sYXlvdXRfY2xhc3NfbGlzdD0=";
 
     /*                           ***** OPTIONAL *****
      If you have set up a server to provide session information replace the null value

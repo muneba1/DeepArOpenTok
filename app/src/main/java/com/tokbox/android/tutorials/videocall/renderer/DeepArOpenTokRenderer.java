@@ -1,8 +1,6 @@
 package com.tokbox.android.tutorials.videocall.renderer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.opengl.GLSurfaceView;
 import android.view.View;
 
@@ -26,7 +24,7 @@ public class DeepArOpenTokRenderer extends BaseVideoRenderer {
         mRenderer = new DeepARRenderer(deepAR);
         mRenderView.setRenderer(mRenderer);
         this.deepAR = deepAR;
-        mRenderView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
     }
 
     @Override
